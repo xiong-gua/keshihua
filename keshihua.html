@@ -111,7 +111,6 @@
 
     <!-- 主内容区 -->
     <main id="mainContent" class="container mx-auto py-12 px-4 hidden">
-        <!-- 内容同之前保持一致 -->
         <!-- 简介部分 -->
         <section class="mb-16 text-center max-w-3xl mx-auto">
             <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-dark">年轻人婚育现状分析</h2>
@@ -121,32 +120,139 @@
             </p>
         </section>
         
-        <!-- 图表展示区（省略重复代码，保持原结构） -->
+        <!-- 图表展示区 -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <!-- 1. 结婚率与生育率趋势图 -->
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
-                <!-- 内容同之前 -->
+                <div class="p-6 border-b">
+                    <h3 class="text-xl font-bold flex items-center">
+                        <i class="fa fa-line-chart text-primary mr-2"></i>
+                        2014-2024年结婚率与生育率趋势
+                    </h3>
+                    <button class="details-btn text-secondary hover:text-primary text-sm mt-1" data-target="trendDetails">
+                        <i class="fa fa-info-circle"></i> 查看详情
+                    </button>
+                </div>
+                <div class="p-4 h-[500px]">
+                    <div id="trendChart" class="w-full h-full"></div>
+                </div>
+                <div id="trendDetails" class="details-content hidden p-6 bg-gray-50 border-t">
+                    <p class="text-gray-700">
+                        从2014年至2024年，我国结婚率整体呈现下降趋势，从2014年的1306.7万对下降至2024年的610.6万对，
+                        近乎腰斩。期间仅在2023年因疫情后的补偿性需求及"双春年"民俗影响有所回升（达768万对），
+                        但2024年再度大幅下跌，刷新自1980年以来的最低纪录。
+                    </p>
+                    <p class="text-gray-700 mt-3">
+                        生育率方面，尽管2024年出生人口较2023年增加了52万人，但整体人口形势依旧严峻，
+                        此前多年出生人口持续下滑，反映出长期积累的生育困境。
+                    </p>
+                </div>
             </section>
             
             <!-- 2. 情绪玫瑰图 -->
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
-                <!-- 内容同之前 -->
+                <div class="p-6 border-b">
+                    <h3 class="text-xl font-bold flex items-center">
+                        <i class="fa fa-smile-o text-primary mr-2"></i>
+                        微博七大情绪分布
+                    </h3>
+                    <button class="details-btn text-secondary hover:text-primary text-sm mt-1" data-target="emotionDetails">
+                        <i class="fa fa-info-circle"></i> 查看详情
+                    </button>
+                </div>
+                <div class="p-4 h-[500px]">
+                    <div id="emotionChart" class="w-full h-full"></div>
+                </div>
+                <div id="emotionDetails" class="details-content hidden p-6 bg-gray-50 border-t">
+                    <p class="text-gray-700">
+                        围绕年轻人婚育话题的微博情绪以负面为主导，"怒"（32.08%）和"恶"（26.83%）情绪占比合计近60%，
+                        折射出社会对年轻人婚育难题的深刻焦虑与不满。
+                    </p>
+                    <p class="text-gray-700 mt-3">
+                        "怒"情绪主要源于对婚育成本过高、社会支持体系不足的不满；"恶"情绪则体现了对婚恋市场乱象、
+                        生育政策落地难等现象的厌恶与抵触。积极情绪占比相对较低，且多带有理想化或条件化特征。
+                    </p>
+                </div>
             </section>
             
             <!-- 3. LDA主题分布饼图 -->
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
-                <!-- 内容同之前 -->
+                <div class="p-6 border-b">
+                    <h3 class="text-xl font-bold flex items-center">
+                        <i class="fa fa-tags text-primary mr-2"></i>
+                        微博话题分布
+                    </h3>
+                    <button class="details-btn text-secondary hover:text-primary text-sm mt-1" data-target="topicDetails">
+                        <i class="fa fa-info-circle"></i> 查看详情
+                    </button>
+                </div>
+                <div class="p-4 h-[500px]">
+                    <div id="topicChart" class="w-full h-full"></div>
+                </div>
+                <div id="topicDetails" class="details-content hidden p-6 bg-gray-50 border-t">
+                    <p class="text-gray-700">
+                        微博讨论中，"社会观念与舆论压力"以40.33%的占比成为核心话题，反映出传统婚育观念与现代价值观的冲突，
+                        以及社会对"不婚不育"群体的评价焦虑。
+                    </p>
+                    <p class="text-gray-700 mt-3">
+                        "经济压力与生活"（21.3%）和"婚恋与家庭"（22.2%）也是主要讨论点，体现了经济负担、婚姻质量担忧等
+                        现实因素对年轻人婚育决策的影响。"政策与生育措施"虽占比不高（11.01%），但反映了公众对政策支持的期待。
+                    </p>
+                </div>
             </section>
             
             <!-- 4. 词云图 -->
             <section class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
-                <!-- 内容同之前 -->
+                <div class="p-6 border-b">
+                    <h3 class="text-xl font-bold flex items-center">
+                        <i class="fa fa-cloud text-primary mr-2"></i>
+                        热门话题词云
+                    </h3>
+                    <button class="details-btn text-secondary hover:text-primary text-sm mt-1" data-target="wordcloudDetails">
+                        <i class="fa fa-info-circle"></i> 查看详情
+                    </button>
+                </div>
+                <div class="p-4 h-[500px] flex items-center justify-center">
+                    <img src="年轻人结婚_词云图.png" alt="婚育话题词云图" class="max-w-full max-h-full object-contain" id="wordcloudImage">
+                </div>
+                <div id="wordcloudDetails" class="details-content hidden p-6 bg-gray-50 border-t">
+                    <p class="text-gray-700">
+                        词云图直观呈现了微博平台上年轻人婚育话题的舆论焦点，"不"、"单身"、"生育率低"等核心词汇，
+                        锚定了年轻人"拒婚拒育"行为倾向这一显性讨论焦点。
+                    </p>
+                    <p class="text-gray-700 mt-3">
+                        "经济"、"工作"、"压力"等词汇揭示了现实负担对婚育意愿的抑制作用；"女性"、"初婚年龄"等词
+                        凸显了性别与代际视角下的差异化困境；"政策"、"支援金"等词则展现了网民对解决方案的期待。
+                    </p>
+                </div>
             </section>
         </div>
         
         <!-- 语词共现图 -->
         <section class="mt-10 bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
-            <!-- 内容同之前 -->
+            <div class="p-6 border-b">
+                <h3 class="text-xl font-bold flex items-center">
+                    <i class="fa fa-sitemap text-primary mr-2"></i>
+                    语词共现网络
+                </h3>
+                <button class="details-btn text-secondary hover:text-primary text-sm mt-1" data-target="cooccurrenceDetails">
+                    <i class="fa fa-info-circle"></i> 查看详情
+                </button>
+            </div>
+            <div class="p-4 h-[600px]">
+                <div id="cooccurrenceChart" class="w-full h-full"></div>
+            </div>
+            <div id="cooccurrenceDetails" class="details-content hidden p-6 bg-gray-50 border-t">
+                <p class="text-gray-700">
+                    语词共现图围绕年轻人婚育话题，呈现出复杂且多元的讨论网络。"结婚"、"年轻人"、"生育率"、"人口"等核心词高度聚合，
+                    清晰锚定讨论聚焦于"年轻人婚育行为对人口结构的影响"这一本质命题。
+                </p>
+                <p class="text-gray-700 mt-3">
+                    时间与地域相关词汇（如"2023"、"2024"、"中国"、"日本"、"韩国"）暗示讨论包含"代际对比"与"国际参照"双重维度；
+                    衍生社会问题相关词汇（如"老龄化"、"经济"、"工作"）则勾勒出"婚育-社会发展"的连锁反应链条，
+                    凸显婚育议题对社会系统的深远影响。
+                </p>
+            </div>
         </section>
     </main>
 
@@ -178,6 +284,7 @@
                 const left = Math.random() * 100; // 0-100%
                 const delay = Math.random() * 3; // 0-3s 延迟
                 const duration = Math.random() * 5 + 3; // 3-8s 动画时长
+                const rotation = Math.random() * 360; // 0-360度旋转
                 
                 // 应用样式
                 petal.style.width = `${size}px`;
@@ -186,6 +293,7 @@
                 petal.style.top = '-5%';
                 petal.style.backgroundImage = `url(${shape})`;
                 petal.style.animation = `fall ${duration}s ease ${delay}s forwards`;
+                petal.style.transform = `rotate(${rotation}deg)`;
                 
                 // 添加到页面
                 document.body.appendChild(petal);
@@ -236,12 +344,16 @@
                 }, 500);
             });
             
-            // 详情按钮点击事件（保持原逻辑）
+            // 详情按钮点击事件
             document.querySelectorAll('.details-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
                     const content = document.getElementById(targetId);
+                    
+                    // 切换显示状态
                     content.classList.toggle('hidden');
+                    
+                    // 如果显示，则滚动到内容区域
                     if (!content.classList.contains('hidden')) {
                         content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
@@ -249,11 +361,339 @@
             });
         });
         
-        // 图表初始化函数（保持原逻辑）
-        function initTrendChart() { /* 原代码 */ }
-        function initEmotionChart() { /* 原代码 */ }
-        function initTopicChart() { /* 原代码 */ }
-        function initCooccurrenceChart() { /* 原代码 */ }
+        // 1. 初始化结婚率与生育率趋势图
+        function initTrendChart() {
+            const chartDom = document.getElementById('trendChart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                title: {
+                    text: '2014-2024年结婚率与生育率趋势',
+                    left: 'center',
+                    textStyle: {
+                        color: '#424242'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['结婚率（万对）', '生育率（‰）'],
+                    top: 30,
+                    right: 20
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['2014年', '2015年', '2016年', '2017年', '2018年', '2019年', '2020年', '2021年', '2022年', '2023年', '2024年'],
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '结婚率（万对）',
+                        nameTextStyle: {
+                            color: '#F8BBD0'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#F8BBD0'
+                            }
+                        },
+                        axisLabel: {
+                            formatter: '{value}',
+                            color: '#F8BBD0'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: '生育率（‰）',
+                        nameTextStyle: {
+                            color: '#BBDEFB'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#BBDEFB'
+                            }
+                        },
+                        axisLabel: {
+                            formatter: '{value}',
+                            color: '#BBDEFB'
+                        },
+                        position: 'right'
+                    }
+                ],
+                series: [
+                    {
+                        name: '结婚率（万对）',
+                        type: 'line',
+                        data: [1306.7, 1224.7, 1142.8, 1063.1, 1013.9, 927.3, 814.3, 763.6, 683.5, 768, 610.6],
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3,
+                            color: '#F8BBD0'
+                        },
+                        itemStyle: {
+                            color: '#F8BBD0'
+                        },
+                        emphasis: {
+                            scale: true
+                        }
+                    },
+                    {
+                        name: '生育率（‰）',
+                        type: 'line',
+                        data: [12.37, 12.07, 12.95, 12.43, 10.94, 10.48, 8.52, 7.52, 6.77, 6.39, 6.0],
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3,
+                            color: '#BBDEFB'
+                        },
+                        itemStyle: {
+                            color: '#BBDEFB'
+                        },
+                        emphasis: {
+                            scale: true
+                        },
+                        yAxisIndex: 1
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+        
+        // 2. 初始化情绪玫瑰图
+        function initEmotionChart() {
+            const chartDom = document.getElementById('emotionChart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                title: {
+                    text: '微博七大情绪玫瑰图',
+                    subtext: '数据来源：情感分析',
+                    left: 'center',
+                    textStyle: {
+                        color: '#424242'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'horizontal',
+                    bottom: 10,
+                    data: ['乐', '好', '怒', '哀', '惧', '恶', '惊']
+                },
+                series: [
+                    {
+                        name: '情绪分布',
+                        type: 'pie',
+                        radius: ['20%', '75%'],
+                        center: ['50%', '50%'],
+                        roseType: 'radius',
+                        itemStyle: {
+                            borderRadius: 8
+                        },
+                        data: [
+                            { value: 3092, name: '乐', itemStyle: { color: '#C8E6C9' } },
+                            { value: 3733, name: '好', itemStyle: { color: '#A5D6A7' } },
+                            { value: 7300, name: '怒', itemStyle: { color: '#EF9A9A' } },
+                            { value: 1748, name: '哀', itemStyle: { color: '#BBDEFB' } },
+                            { value: 623, name: '惧', itemStyle: { color: '#90CAF9' } },
+                            { value: 6105, name: '恶', itemStyle: { color: '#CE93D8' } },
+                            { value: 156, name: '惊', itemStyle: { color: '#FFCCBC' } }
+                        ],
+                        label: {
+                            formatter: '{b}: {d}%'
+                        }
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+        
+        // 3. 初始化LDA主题分布饼图
+        function initTopicChart() {
+            const chartDom = document.getElementById('topicChart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                title: {
+                    text: '微博LDA主题分布饼图',
+                    left: 'center',
+                    textStyle: {
+                        color: '#424242'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 10,
+                    data: ['婚恋与家庭', '经济压力与生活', '自由与个人追求', '社会观念与舆论压力', '政策与生育措施']
+                },
+                series: [
+                    {
+                        name: '主题分布',
+                        type: 'pie',
+                        radius: ['30%', '70%'],
+                        center: ['60%', '50%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 8,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 16,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: true
+                        },
+                        data: [
+                            { value: 490, name: '婚恋与家庭', itemStyle: { color: '#F8BBD0' } },
+                            { value: 470, name: '经济压力与生活', itemStyle: { color: '#BBDEFB' } },
+                            { value: 114, name: '自由与个人追求', itemStyle: { color: '#C8E6C9' } },
+                            { value: 890, name: '社会观念与舆论压力', itemStyle: { color: '#FFE0B2' } },
+                            { value: 243, name: '政策与生育措施', itemStyle: { color: '#CE93D8' } }
+                        ]
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+        
+        // 4. 初始化语词共现图
+        function initCooccurrenceChart() {
+            const chartDom = document.getElementById('cooccurrenceChart');
+            const myChart = echarts.init(chartDom);
+            
+            // 模拟语词共现数据（实际应用中可从JSON文件加载）
+            const nodes = [
+                { name: '结婚', value: 100, symbolSize: 50 },
+                { name: '年轻人', value: 90, symbolSize: 45 },
+                { name: '生育率', value: 85, symbolSize: 43 },
+                { name: '经济', value: 75, symbolSize: 38 },
+                { name: '压力', value: 70, symbolSize: 35 },
+                { name: '社会观念', value: 80, symbolSize: 40 },
+                { name: '家庭', value: 65, symbolSize: 33 },
+                { name: '政策', value: 60, symbolSize: 30 },
+                { name: '自由', value: 55, symbolSize: 28 },
+                { name: '女性', value: 50, symbolSize: 25 },
+                { name: '2024', value: 45, symbolSize: 23 },
+                { name: '工作', value: 40, symbolSize: 20 },
+                { name: '不', value: 65, symbolSize: 33 },
+                { name: '单身', value: 50, symbolSize: 25 },
+                { name: '日本', value: 35, symbolSize: 18 },
+                { name: '韩国', value: 30, symbolSize: 15 },
+                { name: '老龄化', value: 40, symbolSize: 20 }
+            ];
+            
+            const links = [
+                { source: '结婚', target: '年轻人', value: 5 },
+                { source: '结婚', target: '生育率', value: 4 },
+                { source: '年轻人', target: '生育率', value: 5 },
+                { source: '年轻人', target: '经济', value: 3 },
+                { source: '经济', target: '压力', value: 5 },
+                { source: '结婚', target: '压力', value: 4 },
+                { source: '结婚', target: '社会观念', value: 5 },
+                { source: '社会观念', target: '家庭', value: 4 },
+                { source: '生育率', target: '政策', value: 3 },
+                { source: '年轻人', target: '自由', value: 4 },
+                { source: '结婚', target: '女性', value: 3 },
+                { source: '生育率', target: '2024', value: 3 },
+                { source: '经济', target: '工作', value: 4 },
+                { source: '年轻人', target: '不', value: 5 },
+                { source: '不', target: '单身', value: 4 },
+                { source: '生育率', target: '日本', value: 2 },
+                { source: '日本', target: '韩国', value: 2 },
+                { source: '生育率', target: '老龄化', value: 3 }
+            ];
+            
+            const option = {
+                title: {
+                    text: '微博热门语词共现图',
+                    left: 'center',
+                    textStyle: {
+                        color: '#424242'
+                    }
+                },
+                tooltip: {},
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'force',
+                        force: {
+                            repulsion: 300,
+                            edgeLength: 100
+                        },
+                        roam: true,
+                        label: {
+                            show: true,
+                            fontSize: 14
+                        },
+                        lineStyle: {
+                            color: 'source',
+                            curveness: 0.3
+                        },
+                        emphasis: {
+                            focus: 'adjacency',
+                            lineStyle: {
+                                width: 5
+                            }
+                        },
+                        data: nodes,
+                        links: links
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
     </script>
 </body>
 </html>
