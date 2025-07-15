@@ -67,6 +67,13 @@
             .text-scale:hover {
                 transform: scale(1.05);
             }
+            /* 插画容器动画 */
+            .illustration-container {
+                transition: transform 0.5s ease;
+            }
+            .card-hover:hover .illustration-container {
+                transform: scale(1.03);
+            }
         }
     </style>
 </head>
@@ -144,17 +151,22 @@
                 <div class="p-4 h-[500px]">
                     <div id="trendChart" class="w-full h-full"></div>
                 </div>
-                <div class="flex flex-col md:flex-row items-center p-6 bg-gray-50 border-t gap-6">
-                    <img src="插画4办公.png" alt="婚育压力插画" class="w-full md:w-1/3 rounded-lg shadow-md">
-                    <div id="trendDetails" class="details-content hidden w-full md:w-2/3">
-                        <p class="text-gray-700 text-scale">
-                            结婚率从2013年1346.9万对的峰值持续下降，2024年降至610.6万对，仅在2023年因疫情后补偿性需求
-                            及"双春年"民俗影响短暂回升至768万对。
-                        </p>
-                        <p class="text-gray-700 mt-3 text-scale">
-                            生育率方面，2024年虽较2023年增加52万出生人口，但人口总量仍减少139万人，长期积累的
-                            生育困境尚未根本改变。
-                        </p>
+                <div class="p-6 bg-gray-50 border-t">
+                    <div class="flex flex-col-reverse md:flex-row gap-6 items-center">
+                        <!-- 增大插画尺寸，调整布局顺序 -->
+                        <div class="illustration-container w-full md:w-2/5 overflow-hidden rounded-lg shadow-md">
+                            <img src="插画4办公.png" alt="婚育压力插画" class="w-full h-full object-cover">
+                        </div>
+                        <div id="trendDetails" class="details-content hidden w-full md:w-3/5">
+                            <p class="text-gray-700 text-scale">
+                                结婚率从2013年1346.9万对的峰值持续下降，2024年降至610.6万对，仅在2023年因疫情后补偿性需求
+                                及"双春年"民俗影响短暂回升至768万对。
+                            </p>
+                            <p class="text-gray-700 mt-3 text-scale">
+                                生育率方面，2024年虽较2023年增加52万出生人口，但人口总量仍减少139万人，长期积累的
+                                生育困境尚未根本改变。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -173,17 +185,21 @@
                 <div class="p-4 h-[500px]">
                     <div id="emotionChart" class="w-full h-full"></div>
                 </div>
-                <div class="flex flex-col md:flex-row items-center p-6 bg-gray-50 border-t gap-6">
-                    <img src="插画2没钱.png" alt="情绪相关插画" class="w-full md:w-1/3 rounded-lg shadow-md">
-                    <div id="emotionDetails" class="details-content hidden w-full md:w-2/3">
-                        <p class="text-gray-700 text-scale">
-                            微博讨论中负面情绪占主导，"怒"(32.08%)和"恶"(26.83%)合计近60%，反映出公众对婚育环境的
-                            不满与焦虑。
-                        </p>
-                        <p class="text-gray-700 mt-3 text-scale">
-                            有网民直言："但凡多给母亲和宝宝多一些尊重与理解，也不至于生育率越来越低了"，
-                            这类言论正是负面情绪的典型体现。
-                        </p>
+                <div class="p-6 bg-gray-50 border-t">
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="illustration-container w-full md:w-2/5 overflow-hidden rounded-lg shadow-md">
+                            <img src="插画2没钱.png" alt="情绪相关插画" class="w-full h-full object-cover">
+                        </div>
+                        <div id="emotionDetails" class="details-content hidden w-full md:w-3/5">
+                            <p class="text-gray-700 text-scale">
+                                微博讨论中负面情绪占主导，"怒"(32.08%)和"恶"(26.83%)合计近60%，反映出公众对婚育环境的
+                                不满与焦虑。
+                            </p>
+                            <p class="text-gray-700 mt-3 text-scale">
+                                有网民直言："但凡多给母亲和宝宝多一些尊重与理解，也不至于生育率越来越低了"，
+                                这类言论正是负面情绪的典型体现。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -202,17 +218,21 @@
                 <div class="p-4 h-[500px]">
                     <div id="topicChart" class="w-full h-full"></div>
                 </div>
-                <div class="flex flex-col md:flex-row items-center p-6 bg-gray-50 border-t gap-6">
-                    <img src="插画3想象.png" alt="主题相关插画" class="w-full md:w-1/3 rounded-lg shadow-md">
-                    <div id="topicDetails" class="details-content hidden w-full md:w-2/3">
-                        <p class="text-gray-700 text-scale">
-                            "社会观念与舆论压力"(40.33%)是最受关注的话题，反映出传统婚育观念与现代价值观的冲突，
-                            以及"被催婚"等现实压力。
-                        </p>
-                        <p class="text-gray-700 mt-3 text-scale">
-                            经济压力(21.3%)和婚恋家庭(22.2%)也是核心讨论点，"工资赶不上养娃开销"等言论
-                            凸显了现实负担对婚育决策的影响。
-                        </p>
+                <div class="p-6 bg-gray-50 border-t">
+                    <div class="flex flex-col-reverse md:flex-row gap-6 items-center">
+                        <div class="illustration-container w-full md:w-2/5 overflow-hidden rounded-lg shadow-md">
+                            <img src="插画3想象.png" alt="主题相关插画" class="w-full h-full object-cover">
+                        </div>
+                        <div id="topicDetails" class="details-content hidden w-full md:w-3/5">
+                            <p class="text-gray-700 text-scale">
+                                "社会观念与舆论压力"(40.33%)是最受关注的话题，反映出传统婚育观念与现代价值观的冲突，
+                                以及"被催婚"等现实压力。
+                            </p>
+                            <p class="text-gray-700 mt-3 text-scale">
+                                经济压力(21.3%)和婚恋家庭(22.2%)也是核心讨论点，"工资赶不上养娃开销"等言论
+                                凸显了现实负担对婚育决策的影响。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -231,16 +251,20 @@
                 <div class="p-4 h-[500px] flex items-center justify-center">
                     <img src="年轻人结婚_词云图.png" alt="婚育话题词云图" class="max-w-full max-h-full object-contain" id="wordcloudImage">
                 </div>
-                <div class="flex flex-col md:flex-row items-center p-6 bg-gray-50 border-t gap-6">
-                    <img src="卧室插画1.png" alt="词云相关插画" class="w-full md:w-1/3 rounded-lg shadow-md">
-                    <div id="wordcloudDetails" class="details-content hidden w-full md:w-2/3">
-                        <p class="text-gray-700 text-scale">
-                            词云图中"不"、"单身"、"生育率低"等词汇突出，反映出年轻人对婚育的抵触倾向，
-                            而"经济"、"压力"等词则揭示了背后的现实原因。
-                        </p>
-                        <p class="text-gray-700 mt-3 text-scale">
-                            地域相关词汇如"上海"、"日本"、"韩国"的出现，体现了网民对不同地区婚育状况的对比与关注。
-                        </p>
+                <div class="p-6 bg-gray-50 border-t">
+                    <div class="flex flex-col md:flex-row gap-6 items-center">
+                        <div class="illustration-container w-full md:w-2/5 overflow-hidden rounded-lg shadow-md">
+                            <img src="卧室插画1.png" alt="词云相关插画" class="w-full h-full object-cover">
+                        </div>
+                        <div id="wordcloudDetails" class="details-content hidden w-full md:w-3/5">
+                            <p class="text-gray-700 text-scale">
+                                词云图中"不"、"单身"、"生育率低"等词汇突出，反映出年轻人对婚育的抵触倾向，
+                                而"经济"、"压力"等词则揭示了背后的现实原因。
+                            </p>
+                            <p class="text-gray-700 mt-3 text-scale">
+                                地域相关词汇如"上海"、"日本"、"韩国"的出现，体现了网民对不同地区婚育状况的对比与关注。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -260,18 +284,22 @@
             <div class="p-4 h-[600px]">
                 <div id="cooccurrenceChart" class="w-full h-full"></div>
             </div>
-            <div class="flex flex-col md:flex-row items-center p-6 bg-gray-50 border-t gap-6">
-                <div id="cooccurrenceDetails" class="details-content hidden w-full md:w-2/3">
-                    <p class="text-gray-700 text-scale">
-                        语词共现图显示"结婚"、"年轻人"、"生育率"等核心词高度关联，形成以人口结构影响为核心的讨论网络。
-                        "经济"与"压力"、"工作"的强关联，凸显了物质条件对婚育选择的制约。
-                    </p>
-                    <p class="text-gray-700 mt-3 text-scale">
-                        时间维度上，"2023"、"2024"等词的出现反映了对近年数据变化的关注；国际维度上，"日本"、"韩国"
-                        等词则体现了对东亚共性婚育困境的探讨。
-                    </p>
+            <div class="p-6 bg-gray-50 border-t">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div id="cooccurrenceDetails" class="details-content hidden w-full md:w-3/5">
+                        <p class="text-gray-700 text-scale">
+                            语词共现图显示"结婚"、"年轻人"、"生育率"等核心词高度关联，形成以人口结构影响为核心的讨论网络。
+                            "经济"与"压力"、"工作"的强关联，凸显了物质条件对婚育选择的制约。
+                        </p>
+                        <p class="text-gray-700 mt-3 text-scale">
+                            时间维度上，"2023"、"2024"等词的出现反映了对近年数据变化的关注；国际维度上，"日本"、"韩国"
+                            等词则体现了对东亚共性婚育困境的探讨。
+                        </p>
+                    </div>
+                    <div class="illustration-container w-full md:w-2/5 overflow-hidden rounded-lg shadow-md">
+                        <img src="插画2没钱.png" alt="词频相关插画" class="w-full h-full object-cover">
+                    </div>
                 </div>
-                <img src="插画2没钱.png" alt="词频相关插画" class="w-full md:w-1/3 rounded-lg shadow-md">
             </div>
         </section>
 
