@@ -3,338 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>婚姻态度探索</title>
+    <title>年轻人婚育态度观察</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <style>
         /* 基础样式 */
         body {
             margin: 0;
-            overflow-x: hidden;
-            background-color: #FAF3E0;
+            background-color: #F9F2ED;
+            color: #424242;
+            scroll-behavior: smooth;
         }
-        .花瓣 {
-            position: fixed;
-            background-size: contain;
-            background-repeat: no-repeat;
-            pointer-events: none;
-            z-index: 100;
-            opacity: 0.7;
+        .section {
+            min-height: 100vh;
+            padding: 60px 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background-color: #F8BBD0;
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         /* 封面样式 */
         .cover {
-            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow: hidden;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f8bbd0' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            text-align: center;
         }
         .cover-bg {
+            width: 100%;
+            height: 100%;
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
             background-image: url("背景图.png");
             background-size: cover;
             background-position: center;
-            opacity: 0.6;
-            z-index: 1;
+            opacity: 0.2;
+            z-index: 0;
         }
         .cover-content {
             position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 0 20px;
+            z-index: 1;
+            max-width: 800px;
         }
         .cover-title {
-            font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: bold;
+            font-size: clamp(3rem, 10vw, 5rem);
+            margin-bottom: 30px;
             color: #424242;
-            margin: 0 0 30px 0;
-            line-height: 1.2;
         }
-        .cover-desc {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: #5A4B40;
-            max-width: 800px;
-            margin-bottom: 50px;
-        }
-        .jump-btn {
-            padding: 15px 30px;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            background-color: #F8BBD0;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(248, 187, 208, 0.4);
-        }
-        .jump-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(248, 187, 208, 0.6);
-        }
-
-        /* 旋转滑动页面容器 */
-        .page-container {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-        .pages {
-            display: flex;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-            transform-style: preserve-3d;
-        }
-        .page {
-            min-width: 100%;
-            min-height: 100vh;
-            padding: 50px 20px;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        /* 页面内容样式 */
-        .page-title {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            color: #424242;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .page-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .cover-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            gap: 30px;
+            margin: 50px 0;
+        }
+        .stat-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #F8BBD0;
+        }
+        .scroll-indicator {
+            margin-top: 60px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* 内容区样式 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             align-items: center;
         }
         .illustration {
             width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.5s ease;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
         }
         .illustration:hover {
-            transform: rotate(2deg) scale(1.02);
+            transform: translateY(-10px);
         }
-        .text-box {
-            padding: 30px;
+        .text-content {
+            padding: 40px;
             background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
         }
-        .text-box p {
-            font-size: 1.1rem;
+        .text-content p {
             line-height: 1.8;
-            color: #5A4B40;
             margin-bottom: 20px;
+            font-size: 1.1rem;
         }
-        .next-link {
+        .highlight {
             display: inline-block;
-            color: #F8BBD0;
+            background-color: #F8BBD020;
+            padding: 0 8px;
+            border-radius: 4px;
+            color: #E86A92;
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
-        .next-link:hover {
-            color: #BBDEFB;
-            transform: translateX(5px);
-        }
-        .chart-box {
+        .chart-wrapper {
             width: 100%;
             height: 400px;
-            margin-top: 20px;
+            margin-top: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* 装饰元素 */
+        .decor {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        .decor-heart {
+            font-size: 200px;
+            color: #F8BBD0;
+            top: 20%;
+            right: 5%;
+        }
+        .decor-home {
+            font-size: 180px;
+            color: #BBDEFB;
+            bottom: 10%;
+            left: 5%;
         }
     </style>
 </head>
 <body>
-    <!-- 花瓣特效 -->
-    <div id="花瓣容器"></div>
-
-    <!-- 封面页 -->
-    <div class="cover" id="cover">
+    <!-- 封面区 -->
+    <section class="section cover relative">
         <div class="cover-bg"></div>
         <div class="cover-content">
             <h1 class="cover-title">你是否<br>对婚姻失望？</h1>
-            <p class="cover-desc">
-                据《图文说明》数据，2024年结婚登记数610.6万对，较2013年近乎腰斩；生育率6.77‰长期低位运行。<br>
-                微博2260条讨论中，32.08%的"怒"与26.83%的"恶"，藏着年轻人对婚姻的复杂态度。
+            <p class="text-lg max-w-2xl mx-auto">
+                2024年结婚登记数610.6万对，较2013年近乎腰斩；生育率6.77‰长期低位运行。<br>
+                微博2260条讨论中，藏着年轻人对婚姻的真实态度。
             </p>
-            <button class="jump-btn" onclick="enterPages()">点击走进年轻人的婚姻观</button>
+            <div class="cover-stats">
+                <div class="stat-card">
+                    <div class="stat-label">结婚率下降幅度</div>
+                    <div class="stat-value">-53%</div>
+                    <div class="text-sm text-gray-500">2013-2024</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">负面情绪占比</div>
+                    <div class="stat-value">58.91%</div>
+                    <div class="text-sm text-gray-500">怒+恶情绪总和</div>
+                </div>
+            </div>
+            <a href="#emotion" class="scroll-indicator">
+                <i class="fa fa-angle-down text-3xl text-gray-500"></i>
+            </a>
         </div>
-    </div>
+        <i class="fa fa-heart decor decor-heart"></i>
+    </section>
 
-    <!-- 旋转滑动页面容器 -->
-    <div class="page-container" id="pageContainer" style="display: none;">
-        <div class="pages" id="pages">
-            <!-- 第1页：婚恋质量与家庭（对应文档LDA主题22.2%） -->
-            <div class="page">
-                <h2 class="page-title">婚姻质量的现实困境</h2>
-                <div class="page-content">
-                    <div>
-                        <img src="卧室插画1.png" alt="婚姻家庭场景" class="illustration">
-                    </div>
-                    <div class="text-box">
-                        <p>
-                            《图文说明》中LDA主题分析显示，22.2%的讨论聚焦"婚恋与家庭"。当代年轻人对婚姻质量的要求显著提升，不再将婚姻视为"必选项"，而是更看重情感契合与责任共担。
-                        </p>
-                        <p>
-                            微博数据显示，"婚后矛盾""家务分配""育儿责任"等话题的负面情绪占比达68%，许多年轻人因害怕婚姻中的不确定性而选择观望。正如网友所说："不想为了结婚而结婚，更怕婚后生活质量下降。"
-                        </p>
-                        <span class="next-link" onclick="nextPage()">探索经济压力的影响 →</span>
-                    </div>
+    <!-- 情绪分析区 -->
+    <section class="section" id="emotion">
+        <div class="container">
+            <h2 class="section-title">情绪里的态度</h2>
+            <div class="content-grid">
+                <div>
+                    <img src="插画2没钱.png" alt="经济压力与负面情绪" class="illustration">
                 </div>
-            </div>
-
-            <!-- 第2页：经济压力（对应文档LDA主题21.3%） -->
-            <div class="page">
-                <h2 class="page-title">经济压力下的婚育选择</h2>
-                <div class="page-content">
-                    <div class="text-box">
-                        <p>
-                            文档指出，21.3%的讨论聚焦"经济压力与生活"，成为制约婚育的核心因素。高房价、育儿成本攀升让年轻人对婚育望而却步——大城市购房需数十年积蓄，0-18岁育儿成本平均超20万元。
-                        </p>
-                        <p>
-                            微博中"工资赶不上养娃开销""结婚=降低生活质量"等言论高频出现，经济安全感的缺失直接降低了婚育意愿。数据显示，育儿成本每上涨10%，生育意愿下降8%，这一关联在讨论中被反复印证。
-                        </p>
-                        <span class="next-link" onclick="nextPage()">了解社会观念的冲突 →</span>
-                    </div>
-                    <div>
-                        <img src="插画2没钱.png" alt="经济压力场景" class="illustration">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 第3页：社会观念冲突（对应文档LDA主题40.33%） -->
-            <div class="page">
-                <h2 class="page-title">观念拉扯中的婚育焦虑</h2>
-                <div class="page-content">
-                    <div>
-                        <img src="插画4办公.png" alt="社会观念场景" class="illustration">
-                    </div>
-                    <div class="text-box">
-                        <p>
-                            《图文说明》中占比最高的主题是"社会观念与舆论压力"（40.33%），反映传统婚育观与现代价值观的激烈碰撞。"男大当婚女大当嫁"的传统观念与年轻人"追求自我"的理念形成冲突。
-                        </p>
-                        <p>
-                            微博讨论中，"被催婚""过年不敢回家"等话题的"怒"情绪占比73%，许多年轻人因无法承受舆论压力而对婚姻产生抵触。正如数据显示，社会对"不婚不育"的包容度不足，加剧了年轻人的婚育焦虑。
-                        </p>
-                        <span class="next-link" onclick="nextPage()">看看个人自由的重量 →</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 第4页：自由与个人追求（对应文档LDA主题5.16%） -->
-            <div class="page">
-                <h2 class="page-title">自由优先的当代选择</h2>
-                <div class="page-content">
-                    <div class="text-box">
-                        <p>
-                            文档提到，5.16%的讨论聚焦"自由与个人追求"，当代年轻人自我意识觉醒，更倾向于在婚育前实现自我价值。《中国青年发展报告》显示，"不想被家庭束缚"成为推迟婚育的重要原因。
-                        </p>
-                        <p>
-                            微博中"想先闯事业""不想为婚姻放弃爱好"等言论与生育率呈正相关，反映出年轻人对个人空间的重视。这种选择并非"自私"，而是对生活方式的重新定义——婚姻不再是人生的唯一归宿，而是可选项之一。
-                        </p>
-                        <span class="next-link" onclick="showSummary()">查看舆论焦点总结 →</span>
-                    </div>
-                    <div>
-                        <img src="插画3想象.png" alt="个人追求场景" class="illustration">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 第5页：总结（词云与情绪） -->
-            <div class="page">
-                <h2 class="page-title">舆论焦点与情绪总结</h2>
-                <div class="page-content">
-                    <div>
-                        <img src="年轻人结婚_词云图.png" alt="婚育话题词云" class="illustration">
-                    </div>
-                    <div class="text-box">
-                        <p>
-                            词云图直观呈现了微博讨论的核心："不""单身""生育率低""经济"等词高频出现，与《图文说明》中情感分析结果呼应——58.91%的负面情绪（怒+恶），反映年轻人对婚姻的失望感源于现实压力的叠加。
-                        </p>
-                        <p>
-                            这些数据背后，是一代人对婚姻意义的重新思考：当婚姻从"必需品"变为"可选项"，社会需要更多理解与包容，而非指责。正如讨论中有人所说："不是不想结婚，而是想在对的时间，以对的方式，和对的人。"
-                        </p>
-                        <span class="next-link" onclick="backToCover()">返回首页 →</span>
+                <div class="text-content">
+                    <p>
+                        微博讨论中，<span class="highlight">32.08%的"怒"</span>与<span class="highlight">26.83%的"恶"</span>构成主要情绪，合计58.91%。
+                    </p>
+                    <p>
+                        "怒"多源于婚育成本高、社会支持不足；"恶"则指向婚恋乱象与政策落地难。积极情绪占比不足30%，反映年轻人对婚姻环境的不满。
+                    </p>
+                    <div class="chart-wrapper">
+                        <div id="emotionChart"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- LDA主题区 -->
+    <section class="section" id="topics">
+        <div class="container">
+            <h2 class="section-title">讨论的焦点</h2>
+            <div class="content-grid">
+                <div class="text-content">
+                    <p>
+                        主题聚类显示，<span class="highlight">社会观念与舆论压力（40.33%）</span>是核心话题，反映传统与现代价值观的冲突。
+                    </p>
+                    <p>
+                        经济压力（21.3%）、婚恋质量（22.2%）紧随其后，而政策期待仅占11.01%，凸显现实困境远大于对政策的信心。
+                    </p>
+                    <div class="chart-wrapper">
+                        <div id="topicChart"></div>
+                    </div>
+                </div>
+                <div>
+                    <img src="插画4办公.png" alt="社会观念冲突" class="illustration">
+                </div>
+            </div>
+        </div>
+        <i class="fa fa-home decor decor-home"></i>
+    </section>
+
+    <!-- 词云与总结区 -->
+    <section class="section" id="summary">
+        <div class="container">
+            <h2 class="section-title">舆论的焦点</h2>
+            <div class="content-grid">
+                <div>
+                    <img src="年轻人结婚_词云图.png" alt="婚育话题词云" class="illustration">
+                </div>
+                <div class="text-content">
+                    <p>
+                        词云中"不""单身""生育率低"等词突出，直观反映年轻人的"拒婚拒育"倾向。
+                    </p>
+                    <p>
+                        "经济""工作""压力"等词揭示现实负担；"女性""政策"则指向性别差异与制度期待，与LDA主题分析相互印证。
+                    </p>
+                    <p>
+                        这些数据背后，是个体选择与社会结构的碰撞——年轻人用"不婚不育"对抗压力，也在重新定义婚姻的意义。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
-        // 花瓣特效
-        function createPetals() {
-            const container = document.getElementById('花瓣容器');
-            const petals = ['https://cdn-icons-png.flaticon.com/128/821/821907.png', 'https://cdn-icons-png.flaticon.com/128/1067/1067969.png', 'https://cdn-icons-png.flaticon.com/128/542/542747.png'];
-            
-            setInterval(() => {
-                const petal = document.createElement('div');
-                petal.className = '花瓣';
-                petal.style.width = `${Math.random() * 20 + 10}px`;
-                petal.style.height = `${Math.random() * 20 + 10}px`;
-                petal.style.left = `${Math.random() * 100}%`;
-                petal.style.top = '-5%';
-                petal.style.backgroundImage = `url(${petals[Math.floor(Math.random() * petals.length)]})`;
-                petal.style.animation = `fall ${Math.random() * 8 + 5}s linear`;
-                container.appendChild(petal);
-                
-                setTimeout(() => {
-                    petal.remove();
-                }, 13000);
-            }, 500);
-        }
-        createPetals();
+        // 初始化图表（基于文档数据）
+        window.addEventListener('load', () => {
+            // 情绪玫瑰图
+            const emotionChart = echarts.init(document.getElementById('emotionChart'));
+            emotionChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { orient: 'horizontal', bottom: 0, data: ['乐', '好', '怒', '哀', '惧', '恶', '惊'] },
+                series: [{
+                    name: '情绪分布',
+                    type: 'pie',
+                    roseType: 'radius',
+                    data: [
+                        { value: 3092, name: '乐' },
+                        { value: 3733, name: '好' },
+                        { value: 7300, name: '怒' },
+                        { value: 1748, name: '哀' },
+                        { value: 623, name: '惧' },
+                        { value: 6105, name: '恶' },
+                        { value: 156, name: '惊' }
+                    ],
+                    itemStyle: { color: ['#C8E6C9', '#A5D6A7', '#EF9A9A', '#BBDEFB', '#90CAF9', '#CE93D8', '#FFCCBC'] }
+                }]
+            });
 
-        // 页面旋转滑动控制
-        let currentPage = 0;
-        const totalPages = 5;
+            // LDA主题饼图
+            const topicChart = echarts.init(document.getElementById('topicChart'));
+            topicChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { orient: 'vertical', left: 0, top: 'center' },
+                series: [{
+                    name: '主题分布',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    data: [
+                        { value: 890, name: '社会观念与舆论压力' },
+                        { value: 470, name: '经济压力与生活' },
+                        { value: 490, name: '婚恋与家庭' },
+                        { value: 243, name: '政策与生育措施' },
+                        { value: 114, name: '自由与个人追求' }
+                    ],
+                    itemStyle: { color: ['#FFE0B2', '#BBDEFB', '#F8BBD0', '#CE93D8', '#C8E6C9'] }
+                }]
+            });
 
-        function enterPages() {
-            document.getElementById('cover').style.display = 'none';
-            document.getElementById('pageContainer').style.display = 'block';
-        }
-
-        function nextPage() {
-            if (currentPage < totalPages - 1) {
-                currentPage++;
-                updatePagePosition();
-            }
-        }
-
-        function updatePagePosition() {
-            const pages = document.getElementById('pages');
-            pages.style.transform = `translateX(-${currentPage * 100}%) rotateY(${currentPage * 15}deg)`;
-        }
-
-        function showSummary() {
-            currentPage = 4;
-            updatePagePosition();
-        }
-
-        function backToCover() {
-            document.getElementById('pageContainer').style.display = 'none';
-            document.getElementById('cover').style.display = 'flex';
-            currentPage = 0;
-            updatePagePosition();
-        }
-
-        // 添加CSS动画
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                0% { transform: translateY(-10px) rotate(0deg); opacity: 0.7; }
-                100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
+            // 响应窗口大小
+            window.addEventListener('resize', () => {
+                emotionChart.resize();
+                topicChart.resize();
+            });
+        });
     </script>
 </body>
 </html>
