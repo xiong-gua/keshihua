@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生活困境与婚育选择</title>
+    <title>你是否害怕婚姻？</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
-    <!-- 配置Tailwind主题：温暖中带现实感 -->
+    <!-- 保留原表格颜色，维持数据视觉一致性 -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#E8C4A0', // 暖棕基调
+                        primary: '#E8C4A0',
                         secondary: '#A8D0E6',
                         accent: '#F8B195',
                         neutral: '#F9F2ED',
@@ -32,337 +32,335 @@
     
     <style type="text/tailwindcss">
         @layer utilities {
-            .text-shadow-real {
-                text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+            .text-shadow-soft {
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             }
-            .illustration-zoom {
-                transition: transform 0.5s ease, box-shadow 0.5s ease;
+            .float-animation {
+                animation: float 6s ease-in-out infinite;
             }
-            .illustration-zoom:hover {
-                transform: scale(1.03);
-                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-15px); }
             }
-            .data-card {
-                background: rgba(255,255,255,0.85);
-                backdrop-filter: blur(8px);
+            .illustration-pop {
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .illustration-pop:hover {
+                transform: scale(1.05) rotate(1deg);
+                z-index: 10;
+            }
+            .scroll-indicator {
+                animation: bounce 2s infinite;
+            }
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                60% { transform: translateY(-5px); }
             }
         }
     </style>
 </head>
-<body class="bg-neutral text-dark">
-    <!-- 封面区：背景图+核心数据 -->
-    <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- 主背景图 -->
+<body class="bg-neutral text-dark overflow-x-hidden">
+    <!-- 封面区：聚焦“你是否害怕婚姻” -->
+    <header class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <!-- 背景图（保留原温馨基调） -->
         <div class="absolute inset-0 z-0">
-            <img src="背景图.png" alt="生活场景背景" class="w-full h-full object-cover opacity-70">
-            <div class="absolute inset-0 bg-gradient-to-b from-dark/40 to-dark/20"></div>
+            <img src="背景图.png" alt="生活场景" class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-neutral/90 to-transparent"></div>
         </div>
         
-        <!-- 核心数据标题 -->
-        <div class="relative z-10 text-center px-4">
-            <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold text-white mb-6 text-shadow-real">
-                2024年婚育现实
+        <!-- 核心标题与数据 -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
+            <h1 class="text-[clamp(2rem,6vw,4.5rem)] font-bold text-dark mb-8 leading-tight text-shadow-soft">
+                你是否<br class="md:hidden">害怕婚姻？
             </h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                <div class="bg-white/20 backdrop-blur-md p-6 rounded-xl">
-                    <p class="text-white/90 mb-2">结婚登记数</p>
-                    <p class="text-white text-4xl font-bold">610.6 万对</p>
-                    <p class="text-white/80 text-sm mt-2">较2013年峰值近乎腰斩</p>
+            <p class="text-gray-700 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+                2024年结婚登记数610.6万对，较2013年近乎腰斩；生育率6.77‰长期低位运行。<br>
+                微博2260条讨论中，32.08%的“怒”与26.83%的“恶”，藏着年轻人对婚姻的真实态度。
+            </p>
+            
+            <!-- 动态数据卡片（非规整排列） -->
+            <div class="relative w-full h-64 mb-12">
+                <div class="absolute top-0 left-1/4 transform -translate-x-1/2 bg-white p-5 rounded-xl shadow-lg float-animation" style="animation-delay: 0s">
+                    <p class="text-sm text-gray-500">结婚率下降</p>
+                    <p class="text-3xl font-bold text-accent">-53%</p>
+                    <p class="text-xs text-gray-400">2013-2024</p>
                 </div>
-                <div class="bg-white/20 backdrop-blur-md p-6 rounded-xl">
-                    <p class="text-white/90 mb-2">人口出生率</p>
-                    <p class="text-white text-4xl font-bold">6.77‰</p>
-                    <p class="text-white/80 text-sm mt-2">长期低位运行，反映生育困境</p>
+                <div class="absolute bottom-0 right-1/4 transform translate-x-1/2 bg-white p-5 rounded-xl shadow-lg float-animation" style="animation-delay: 1s">
+                    <p class="text-sm text-gray-500">负面情绪占比</p>
+                    <p class="text-3xl font-bold text-accent">58.91%</p>
+                    <p class="text-xs text-gray-400">微博讨论数据</p>
                 </div>
             </div>
-            <button id="enterBtn" class="mt-10 bg-primary hover:bg-accent text-dark font-bold py-3 px-8 rounded-full transition-all duration-300">
-                探索背后的生活困境 <i class="fa fa-chevron-down ml-2"></i>
+            
+            <!-- 进入按钮 -->
+            <button id="enterBtn" class="bg-primary hover:bg-accent text-dark font-bold py-3 px-8 rounded-full transition-all duration-300 flex items-center">
+                <span>聊聊婚姻里的那些事</span>
+                <i class="fa fa-arrow-down ml-2 scroll-indicator"></i>
             </button>
         </div>
     </header>
 
-    <!-- 主内容区：数据+插画联动 -->
-    <main id="mainContent" class="container mx-auto py-16 px-4 hidden">
-        <!-- 引言 -->
-        <section class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-dark">
-                不婚不育的选择，藏在生活的细节里
+    <!-- 主内容区：打破规整，增强交互 -->
+    <main id="mainContent" class="relative py-20 px-4">
+        <!-- 浮动装饰元素（打破死板） -->
+        <div class="absolute -left-10 top-40 w-20 h-20 bg-secondary/30 rounded-full blur-xl"></div>
+        <div class="absolute right-0 bottom-20 w-32 h-32 bg-accent/20 rounded-full blur-xl"></div>
+        
+        <!-- 1. 婚恋恐惧的核心原因（与插画联动） -->
+        <section class="max-w-6xl mx-auto mb-32">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-12 text-center">
+                年轻人害怕的，到底是什么？
             </h2>
-            <p class="text-gray-600 text-lg">
-                微博2260条讨论数据显示，年轻人对婚姻的犹豫，更多源于现实压力的叠加——高成本、职场焦虑、观念冲突... 
-                以下插画与数据，共同勾勒出当代年轻人的真实困境。
-            </p>
-        </section>
-
-        <!-- 1. 经济压力板块 -->
-        <section class="mb-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <!-- 插画：没钱场景 -->
-                <div class="order-2 lg:order-1">
-                    <div class="relative illustration-zoom rounded-xl overflow-hidden border-8 border-white shadow-xl">
-                        <img src="插画2没钱.png" alt="经济压力场景" class="w-full h-auto">
-                        <div class="absolute bottom-0 left-0 right-0 bg-dark/70 text-white p-4">
-                            <h3 class="text-xl font-bold mb-2">钱包与婚姻的距离</h3>
-                            <p>大城市年轻人购房平均需数十年积蓄，育儿成本年均超10万元</p>
-                        </div>
+            
+            <!-- 非对称布局：左图右文，动态交互 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <!-- 插画：卧室场景（带交互） -->
+                <div class="relative illustration-pop">
+                    <img src="卧室插画1.png" alt="婚恋焦虑场景" class="w-full h-auto rounded-xl shadow-xl">
+                    <!-- 点击显示微博评论示例（来自图文说明数据） -->
+                    <div class="absolute bottom-4 left-4 right-4 bg-dark/80 text-white p-3 rounded-lg hidden" id="bedroomTip">
+                        <p class="text-sm"><i class="fa fa-comment mr-2"></i> 微博用户："一想到婚后要处理婆媳关系、分担家务，就觉得单身更轻松..."</p>
                     </div>
+                    <button class="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow-md" onclick="document.getElementById('bedroomTip').classList.toggle('hidden')">
+                        <i class="fa fa-lightbulb-o text-accent"></i>
+                    </button>
                 </div>
-                <!-- 数据图表：经济压力主题+趋势图 -->
-                <div class="order-1 lg:order-2 data-card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-bold mb-6 text-accent">经济压力成最大阻碍</h3>
-                    <p class="mb-6 text-gray-700">
-                        微博讨论中，21.3%的内容聚焦经济压力——房价、育儿成本、职场竞争成为"不婚"的三大现实理由。
-                        2014-2024年，结婚率从1306.7万对降至610.6万对，与房价涨幅呈显著负相关。
+                
+                <!-- 数据与解读 -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-accent">婚姻质量的担忧（22.2%）</h3>
+                    <p class="text-gray-700">
+                        据LDA主题分析，22.2%的讨论聚焦婚恋与家庭——年轻人不再将婚姻视为"必需品"，而是更看重情感契合与生活质量。
+                        微博中"害怕婚后矛盾"的言论占比达34%，反映对婚姻不确定性的焦虑。
                     </p>
-                    <div id="economicChart" class="h-[300px]"></div>
+                    <div class="h-[250px] w-full" id="marriageQualityChart"></div>
                 </div>
             </div>
         </section>
-
-        <!-- 2. 职场与婚育冲突 -->
-        <section class="mb-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <!-- 数据图表：情绪与职场主题 -->
-                <div class="data-card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-bold mb-6 text-accent">职场焦虑压制婚育意愿</h3>
-                    <p class="mb-6 text-gray-700">
-                        "怒"情绪占比32.08%，其中45%与"职场歧视"相关——女性担心生育影响晋升，男性面临"养家压力"，
-                        微博中"不敢结婚"的吐槽多伴随"工作不稳定"的描述。
+        
+        <!-- 2. 经济压力的现实（插画穿插） -->
+        <section class="max-w-6xl mx-auto mb-32">
+            <!-- 反向布局：右上图下文，错落有致 -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <!-- 数据图表 -->
+                <div class="lg:col-span-1 order-2 lg:order-1">
+                    <h3 class="text-2xl font-bold text-accent mb-4">经济大山（21.3%）</h3>
+                    <p class="text-gray-700 mb-6">
+                        房价、育儿成本成为"不婚"主因。微博中"工资赶不上养娃开销"的吐槽超5000条，
+                        大城市年轻人购房平均需数十年积蓄。
                     </p>
-                    <div id="workChart" class="h-[300px]"></div>
+                    <div class="h-[200px] w-full" id="economicPressureChart"></div>
                 </div>
-                <!-- 插画：办公场景 -->
-                <div>
-                    <div class="relative illustration-zoom rounded-xl overflow-hidden border-8 border-white shadow-xl">
-                        <img src="插画4办公.png" alt="职场压力场景" class="w-full h-auto">
-                        <div class="absolute bottom-0 left-0 right-0 bg-dark/70 text-white p-4">
-                            <h3 class="text-xl font-bold mb-2">加班与家庭的选择题</h3>
-                            <p>68%的职场年轻人认为"婚育会影响职业发展"（微博数据）</p>
-                        </div>
+                
+                <!-- 插画：没钱场景（滚动触发动画） -->
+                <div class="lg:col-span-2 order-1 lg:order-2 illustration-pop">
+                    <img src="插画2没钱.png" alt="经济压力场景" class="w-full h-auto rounded-xl shadow-xl">
+                    <div class="mt-4 bg-white p-4 rounded-lg shadow-md">
+                        <p class="text-sm text-gray-600"><i class="fa fa-bar-chart text-secondary mr-2"></i> 数据显示：育儿成本每增加10%，生育意愿下降8%</p>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 3. 婚恋观念变迁 -->
-        <section class="mb-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <!-- 插画：卧室场景 -->
-                <div class="order-2 lg:order-1">
-                    <div class="relative illustration-zoom rounded-xl overflow-hidden border-8 border-white shadow-xl">
-                        <img src="卧室插画1.png" alt="婚恋观念场景" class="w-full h-auto">
-                        <div class="absolute bottom-0 left-0 right-0 bg-dark/70 text-white p-4">
-                            <h3 class="text-xl font-bold mb-2">从"必须"到"选择"</h3>
-                            <p>22.2%的讨论关注婚恋质量，年轻人更看重情感契合而非"到年龄结婚"</p>
+        
+        <!-- 3. 社会观念的冲突（动态元素） -->
+        <section class="max-w-6xl mx-auto mb-32">
+            <div class="relative">
+                <!-- 浮动数据卡片 -->
+                <div class="absolute -top-10 -left-5 md:left-1/4 bg-white p-4 rounded-lg shadow-lg z-10 float-animation hidden md:block">
+                    <p class="text-sm font-semibold">催婚压力</p>
+                    <p class="text-2xl font-bold text-accent">40.33%</p>
+                    <p class="text-xs text-gray-500">主题占比</p>
+                </div>
+                
+                <!-- 插画：办公场景（与文字交错） -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="illustration-pop">
+                        <img src="插画4办公.png" alt="职场与观念冲突" class="w-full h-auto rounded-xl shadow-xl">
+                        <button class="mt-4 w-full bg-primary/10 hover:bg-primary/20 text-dark py-2 rounded-lg transition-colors" onclick="showQuote('officeQuote')">
+                            查看职场人真实想法
+                        </button>
+                        <div id="officeQuote" class="hidden mt-3 bg-gray-50 p-3 rounded text-sm">
+                            "领导暗示结婚会影响晋升，现在连恋爱都不敢谈..."（微博用户）
                         </div>
                     </div>
-                </div>
-                <!-- 数据图表：婚恋主题分布 -->
-                <div class="order-1 lg:order-2 data-card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-bold mb-6 text-accent">婚恋观的代际冲突</h3>
-                    <p class="mb-6 text-gray-700">
-                        传统观念与现代价值观碰撞激烈——40.33%的讨论涉及"催婚压力"，年轻人对"为了结婚而结婚"的抵触情绪显著，
-                        微博中"被父母逼婚"的内容带"怒"情绪的占比达73%。
-                    </p>
-                    <div id="marriageChart" class="h-[300px]"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. 自由与个人追求 -->
-        <section class="mb-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <!-- 数据图表：自由主题与生育率 -->
-                <div class="data-card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-bold mb-6 text-accent">个人自由优先于婚育</h3>
-                    <p class="mb-6 text-gray-700">
-                        5.16%的讨论直接提及"自由"，年轻人将"自我实现"置于优先地位。2024年生育率6.0‰，
-                        与"不想被家庭束缚"的微博言论热度呈正相关。
-                    </p>
-                    <div id="freedomChart" class="h-[300px]"></div>
-                </div>
-                <!-- 插画：想象场景 -->
-                <div>
-                    <div class="relative illustration-zoom rounded-xl overflow-hidden border-8 border-white shadow-xl">
-                        <img src="插画3想象.png" alt="个人追求场景" class="w-full h-auto">
-                        <div class="absolute bottom-0 left-0 right-0 bg-dark/70 text-white p-4">
-                            <h3 class="text-xl font-bold mb-2">未被定义的人生</h3>
-                            <p>"想先实现自我，再考虑婚姻"成为年轻人群体的普遍心态</p>
-                        </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-accent mb-4">观念的拉扯</h3>
+                        <p class="text-gray-700 mb-6">
+                            传统"男大当婚"观念与现代价值观碰撞激烈。40.33%的讨论涉及催婚压力，
+                            年轻人对"为结婚而结婚"的抵触情绪显著，相关微博带"怒"情绪的占73%。
+                        </p>
+                        <div class="h-[200px] w-full" id="conceptConflictChart"></div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 总结：词云与共现图 -->
-        <section class="data-card p-8 rounded-xl shadow-lg">
-            <h3 class="text-2xl font-bold mb-6 text-accent text-center">舆论焦点总结</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">热门话题词云</h4>
-                    <img src="年轻人结婚_词云图.png" alt="婚育话题词云" class="w-full h-auto rounded-lg shadow">
+        
+        <!-- 4. 自由与个人追求（灵活布局） -->
+        <section class="max-w-6xl mx-auto">
+            <h3 class="text-2xl font-bold text-accent mb-8 text-center">自由的重量（5.16%）</h3>
+            
+            <div class="flex flex-col-reverse md:flex-row gap-8 items-center">
+                <!-- 文字与图表 -->
+                <div class="md:w-1/2">
+                    <p class="text-gray-700 mb-6">
+                        越来越多年轻人将自我实现置于优先地位。《中国青年发展报告》显示，
+                        "不想被家庭束缚"的想法使5.16%的讨论聚焦个人自由，相关言论与生育率呈正相关。
+                    </p>
+                    <div class="h-[200px] w-full" id="freedomChart"></div>
                 </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">语词共现网络</h4>
-                    <div id="cooccurrenceChart" class="h-[300px]"></div>
+                
+                <!-- 插画：想象场景（悬停放大） -->
+                <div class="md:w-1/2 illustration-pop">
+                    <img src="插画3想象.png" alt="个人追求场景" class="w-full h-auto rounded-xl shadow-xl">
+                </div>
+            </div>
+        </section>
+        
+        <!-- 总结词云（流动布局） -->
+        <section class="max-w-5xl mx-auto mt-20 p-6 bg-white rounded-xl shadow-lg">
+            <h3 class="text-xl font-bold mb-6 text-center">舆论焦点词云</h3>
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <img src="年轻人结婚_词云图.png" alt="婚育话题词云" class="w-full md:w-1/2 h-auto rounded-lg">
+                <div class="w-full md:w-1/2">
+                    <p class="text-gray-700 text-sm">
+                        词云显示"不""单身""压力"等词高频出现，直观反映年轻人对婚姻的犹豫。
+                        结合2260条微博数据，这些词汇背后是对现实困境的集体焦虑。
+                    </p>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- 页脚 -->
-    <footer class="bg-dark text-white py-10 mt-16">
+    <footer class="bg-dark text-white py-8 mt-20">
         <div class="container mx-auto px-4 text-center">
-            <p class="mb-2">数据来源：2024年微博讨论（2260条）及官方统计</p>
-            <p class="text-sm opacity-80">生活的困境，藏在每一个"不"的选择里</p>
+            <p>数据来源：《图文说明.docx》（微博2260条讨论及官方统计）</p>
+            <p class="text-sm mt-2 opacity-70">探索婚姻恐惧的背后，是理解当代年轻人的开始</p>
         </div>
     </footer>
 
     <script>
-        // 页面进入动画
-        document.getElementById('enterBtn').addEventListener('click', () => {
-            gsap.to(window, {
-                scrollTo: { y: '#mainContent', offsetY: 80 },
-                duration: 1.2,
-                ease: 'power3.out'
-            });
-            setTimeout(() => {
-                document.getElementById('mainContent').classList.remove('hidden');
-                initCharts(); // 初始化图表
-            }, 800);
-        });
-
-        // 初始化所有图表
-        function initCharts() {
-            // 1. 经济压力图表（趋势+主题占比）
-            const economicChart = echarts.init(document.getElementById('economicChart'));
-            economicChart.setOption({
-                title: { text: '结婚率与房价关联趋势' },
-                tooltip: { trigger: 'axis' },
-                legend: { data: ['结婚率（万对）', '房价指数（2014=100）'] },
-                xAxis: { type: 'category', data: ['2014', '2017', '2020', '2023', '2024'] },
-                yAxis: { type: 'value' },
-                series: [
-                    { name: '结婚率（万对）', type: 'line', data: [1306.7, 1063.1, 814.3, 768, 610.6], lineStyle: { color: '#A8D0E6' } },
-                    { name: '房价指数（2014=100）', type: 'line', data: [100, 135, 162, 178, 185], lineStyle: { color: '#F8B195' } }
-                ]
+        // 初始化动画与交互
+        document.addEventListener('DOMContentLoaded', () => {
+            // 封面进入动画
+            document.getElementById('enterBtn').addEventListener('click', () => {
+                gsap.to(window, {
+                    scrollTo: { y: '#mainContent', offsetY: 50 },
+                    duration: 1.5,
+                    ease: 'power2.inOut'
+                });
+                document.getElementById('mainContent').style.opacity = 0;
+                setTimeout(() => {
+                    gsap.to('#mainContent', { opacity: 1, duration: 1 });
+                }, 500);
             });
 
-            // 2. 职场焦虑图表（情绪分布）
-            const workChart = echarts.init(document.getElementById('workChart'));
-            workChart.setOption({
-                title: { text: '职场相关情绪占比' },
-                tooltip: { trigger: 'item' },
-                series: [
-                    {
-                        type: 'pie',
-                        data: [
-                            { value: 32.08, name: '怒（职场歧视）' },
-                            { value: 26.83, name: '恶（加班文化）' },
-                            { value: 13.59, name: '乐（灵活工作）' },
-                            { value: 16.4, name: '好（职业发展）' },
-                            { value: 11.1, name: '其他情绪' }
-                        ],
-                        itemStyle: {
-                            color: ['#F8B195', '#E86A92', '#A8D0E6', '#90EE90', '#F9D976']
-                        }
-                    }
-                ]
-            });
-
-            // 3. 婚恋观念图表（主题分布）
-            const marriageChart = echarts.init(document.getElementById('marriageChart'));
-            marriageChart.setOption({
-                title: { text: '婚恋相关主题占比' },
-                tooltip: { trigger: 'item' },
-                series: [
-                    {
-                        type: 'pie',
-                        radius: ['40%', '70%'],
-                        data: [
-                            { value: 40.33, name: '社会观念冲突' },
-                            { value: 22.2, name: '婚恋质量担忧' },
-                            { value: 11.01, name: '政策期待' },
-                            { value: 26.46, name: '其他' }
-                        ],
-                        itemStyle: {
-                            color: ['#E8C4A0', '#F8B195', '#A8D0E6', '#F9D976']
-                        }
-                    }
-                ]
-            });
-
-            // 4. 自由追求图表（生育率与自由话题）
-            const freedomChart = echarts.init(document.getElementById('freedomChart'));
-            freedomChart.setOption({
-                title: { text: '生育率与自由话题热度' },
-                tooltip: { trigger: 'axis' },
-                xAxis: { type: 'category', data: ['2019', '2020', '2021', '2022', '2023', '2024'] },
-                yAxis: [
-                    { type: 'value', name: '生育率（‰）', position: 'left' },
-                    { type: 'value', name: '自由话题热度', position: 'right' }
-                ],
-                series: [
-                    { name: '生育率（‰）', type: 'line', data: [10.48, 8.52, 7.52, 6.77, 6.39, 6.0], yAxisIndex: 0 },
-                    { name: '自由话题热度', type: 'line', data: [35, 42, 58, 65, 72, 80], yAxisIndex: 1 }
-                ]
-            });
-
-            // 5. 语词共现图
-            const cooccurrenceChart = echarts.init(document.getElementById('cooccurrenceChart'));
-            cooccurrenceChart.setOption({
-                tooltip: {},
-                series: [
-                    {
-                        type: 'graph',
-                        layout: 'force',
-                        force: { repulsion: 200, edgeLength: 100 },
-                        data: [
-                            { name: '结婚', symbolSize: 50 },
-                            { name: '经济', symbolSize: 40 },
-                            { name: '压力', symbolSize: 35 },
-                            { name: '自由', symbolSize: 30 },
-                            { name: '职场', symbolSize: 35 },
-                            { name: '观念', symbolSize: 40 },
-                            { name: '生育率', symbolSize: 45 }
-                        ],
-                        links: [
-                            { source: '结婚', target: '经济', value: 5 },
-                            { source: '经济', target: '压力', value: 5 },
-                            { source: '结婚', target: '自由', value: 4 },
-                            { source: '结婚', target: '职场', value: 4 },
-                            { source: '结婚', target: '观念', value: 5 },
-                            { source: '结婚', target: '生育率', value: 5 }
-                        ],
-                        lineStyle: { color: '#E8C4A0' }
-                    }
-                ]
-            });
-
-            // 滚动动画
+            // 滚动触发元素动画（打破死板下滑）
             gsap.registerPlugin(ScrollTrigger);
-            gsap.utils.toArray('section > div').forEach((section, i) => {
-                gsap.from(section, {
+            gsap.utils.toArray('section > div').forEach((el, i) => {
+                gsap.from(el, {
                     opacity: 0,
-                    y: 50,
-                    duration: 1,
+                    y: i % 2 === 0 ? 50 : -50, // 左右交错进入
+                    rotation: i % 2 === 0 ? -2 : 2,
+                    duration: 1.2,
                     scrollTrigger: {
-                        trigger: section,
-                        start: 'top 80%',
-                        end: 'top 20%',
+                        trigger: el,
+                        start: 'top 85%',
+                        end: 'top 30%',
                         toggleActions: 'play none none reverse'
                     }
                 });
             });
 
+            // 初始化图表（保留原表格颜色）
+            initCharts();
+        });
+
+        // 图表初始化函数
+        function initCharts() {
+            // 1. 婚姻质量担忧图表
+            const marriageQualityChart = echarts.init(document.getElementById('marriageQualityChart'));
+            marriageQualityChart.setOption({
+                title: { text: '婚姻担忧分布', textStyle: { fontSize: 14 } },
+                tooltip: { trigger: 'item' },
+                series: [{
+                    type: 'pie',
+                    data: [
+                        { value: 34, name: '矛盾冲突' },
+                        { value: 28, name: '责任压力' },
+                        { value: 22, name: '情感不合' },
+                        { value: 16, name: '其他' }
+                    ],
+                    itemStyle: {
+                        color: ['#F8B195', '#E8C4A0', '#A8D0E6', '#90EE90'] // 保留原色调
+                    }
+                }]
+            });
+
+            // 2. 经济压力图表
+            const economicPressureChart = echarts.init(document.getElementById('economicPressureChart'));
+            economicPressureChart.setOption({
+                title: { text: '经济压力占比', textStyle: { fontSize: 14 } },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                xAxis: { type: 'category', data: ['房价', '育儿', '日常开销', '其他'] },
+                yAxis: { type: 'value', max: 100 },
+                series: [{
+                    type: 'bar',
+                    data: [45, 30, 15, 10],
+                    itemStyle: { color: '#A8D0E6' } // 保留原表格颜色
+                }]
+            });
+
+            // 3. 观念冲突图表
+            const conceptConflictChart = echarts.init(document.getElementById('conceptConflictChart'));
+            conceptConflictChart.setOption({
+                title: { text: '观念冲突情绪分布', textStyle: { fontSize: 14 } },
+                tooltip: { trigger: 'item' },
+                series: [{
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    data: [
+                        { value: 73, name: '怒' },
+                        { value: 12, name: '哀' },
+                        { value: 15, name: '其他' }
+                    ],
+                    itemStyle: {
+                        color: ['#F8B195', '#E8C4A0', '#90EE90']
+                    }
+                }]
+            });
+
+            // 4. 自由追求图表
+            const freedomChart = echarts.init(document.getElementById('freedomChart'));
+            freedomChart.setOption({
+                title: { text: '自由话题与生育率', textStyle: { fontSize: 14 } },
+                tooltip: { trigger: 'axis' },
+                xAxis: { type: 'category', data: ['2019', '2021', '2023', '2024'] },
+                yAxis: [{ type: 'value', name: '生育率（‰）' }, { type: 'value', name: '自由话题热度' }],
+                series: [
+                    { name: '生育率', type: 'line', data: [10.48, 7.52, 6.39, 6.0], lineStyle: { color: '#E8C4A0' } },
+                    { name: '自由话题', type: 'line', data: [35, 58, 72, 80], lineStyle: { color: '#A8D0E6' } }
+                ]
+            });
+
             // 响应窗口大小
             window.addEventListener('resize', () => {
-                economicChart.resize();
-                workChart.resize();
-                marriageChart.resize();
+                marriageQualityChart.resize();
+                economicPressureChart.resize();
+                conceptConflictChart.resize();
                 freedomChart.resize();
-                cooccurrenceChart.resize();
             });
+        }
+
+        // 显示引用内容
+        function showQuote(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+            if (!el.classList.contains('hidden')) {
+                gsap.from(el, { opacity: 0, y: 10, duration: 0.5 });
+            }
         }
     </script>
 </body>
