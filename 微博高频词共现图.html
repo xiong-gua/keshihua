@@ -282,6 +282,38 @@
                 </div>
             </div>
         </section>
+
+        <!-- 6. 互动填空题页面 -->
+        <section class="page-full bg-gradient-to-b from-primary/20 to-secondary/20 flex flex-col items-center justify-center p-6">
+            <h2 class="text-3xl font-bold text-center mb-10 text-dark">你期待的婚姻是什么样？</h2>
+            
+            <!-- 装饰元素 -->
+            <div class="decor top-20 left-10 text-primary text-[100px]">
+                <i class="fa fa-heart"></i>
+            </div>
+            <div class="decor bottom-20 right-10 text-secondary text-[100px]">
+                <i class="fa fa-star"></i>
+            </div>
+            
+            <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 relative z-10">
+                <p class="text-center mb-6 text-gray-700 text-lg">
+                    在你心中，理想的婚姻是___________________
+                </p>
+                
+                <input type="text" id="marriageInput" placeholder="请写下你对婚姻的期待..." 
+                       class="w-full p-4 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-primary">
+                
+                <button id="generateBtn" class="bg-primary hover:bg-primary/80 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all duration-300 flex items-center justify-center mx-auto">
+                    <span>生成爱情寄语</span>
+                    <i class="fa fa-heart ml-2"></i>
+                </button>
+                
+                <div id="resultArea" class="mt-8 hidden">
+                    <h4 class="text-xl font-semibold mb-4 text-center">愿我们依然相信爱：</h4>
+                    <div id="loveQuotes" class="bg-light p-6 rounded-lg shadow-inner text-center space-y-3"></div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
@@ -488,6 +520,56 @@
             });
         }
         
+        // 初始化互动功能
+        function initInteraction() {
+            const generateBtn = document.getElementById('generateBtn');
+            const resultArea = document.getElementById('resultArea');
+            const loveQuotes = document.getElementById('loveQuotes');
+            const marriageInput = document.getElementById('marriageInput');
+            
+            // 爱情寄语库（结合文档中积极观点）
+            const quotes = [
+                "即使世界喧嚣，总有人为你静下心来 ❤️",
+                "好的爱情，是并肩看遍世间风景后，依然觉得彼此最珍贵 🌅",
+                "对的人，会让你明白等待都是值得的 ⏳",
+                "爱不是寻找完美，而是学会用完美的眼光欣赏不完美 ✨",
+                "慢慢来，对的人正在向你走来 👣",
+                "真正的陪伴，是经得起平淡流年的考验 🕰️",
+                "世界很大，幸福很小，有你就足够 💕"
+            ];
+            
+            generateBtn.addEventListener('click', () => {
+                const input = marriageInput.value.trim();
+                
+                // 清空之前的结果
+                loveQuotes.innerHTML = '';
+                
+                // 随机生成两句寄语
+                const shuffled = [...quotes].sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, 2);
+                
+                selected.forEach(quote => {
+                    const p = document.createElement('p');
+                    p.textContent = quote;
+                    loveQuotes.appendChild(p);
+                });
+                
+                // 显示用户输入（如果有）
+                if (input) {
+                    const userP = document.createElement('p');
+                    userP.className = 'mt-4 pt-4 border-t border-gray-200';
+                    userP.textContent = `你说："${input}" 🌈`;
+                    loveQuotes.appendChild(userP);
+                }
+                
+                // 显示结果区域
+                resultArea.classList.remove('hidden');
+                
+                // 平滑滚动到结果区域
+                resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+        
         // 页面初始化
         document.addEventListener('DOMContentLoaded', () => {
             // 创建花瓣装饰
@@ -498,6 +580,9 @@
             
             // 初始化图表
             initCharts();
+            
+            // 初始化互动功能
+            initInteraction();
             
             // 封面页跳转
             document.getElementById('startBtn').addEventListener('click', () => {
