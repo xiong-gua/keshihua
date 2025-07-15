@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>微博数据可视化大屏</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #fff;
+        }
+        .navbar {
+            background: rgba(0,0,0,0.8);
+        }
+        .card {
+            background: rgba(30,30,30,0.95);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            margin-bottom: 2rem;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+        }
+        .nav-link.active {
+            background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+            color: #fff !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">微博数据可视化大屏</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navTabs">
+        <li class="nav-item"><a class="nav-link active" href="#" data-chart="ldaPie">LDA主题分布饼图</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-chart="rose">七情玫瑰图</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-chart="cooc">词语共现图</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-chart="topicGraph">主题聚类图</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <div id="ldaPie" class="chart-container"></div>
+            <div id="rose" class="chart-container" style="display:none"></div>
+            <div id="cooc" class="chart-container" style="display:none"></div>
+            <div id="topicGraph" class="chart-container" style="display:none"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showChart(chartId) {
+    document.querySelectorAll('.chart-container').forEach(div => div.style.display = 'none');
+    document.getElementById(chartId).style.display = '';
+}
+document.querySelectorAll('#navTabs .nav-link').forEach(link => {
+    link.onclick = function() {
+        document.querySelectorAll('#navTabs .nav-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        showChart(this.dataset.chart);
+    }
+});
+
+// 1. LDA主题分布饼图
+var ldaPie = echarts.init(document.getElementById('ldaPie'));
+ldaPie.setOption({
+    title: { text: '微博LDA主题分布饼图', left: 'center', textStyle: { color: '#fff' } },
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', left: 'left', textStyle: { color: '#fff' } },
+    series: [{
+        name: '主题分布',
+        type: 'pie',
+        radius: ['30%', '70%'],
+        center: ['50%', '55%'],
+        label: { color: '#fff' },
+        data: [
+            // 这里填入你的主题分布数据
+            // { value: 123, name: '婚恋与家庭' }, ...
+        ]
+    }]
+});
+
+// 2. 七情玫瑰图
+var rose = echarts.init(document.getElementById('rose'));
+rose.setOption({
+    title: { text: '微博七大情绪玫瑰图', left: 'center', textStyle: { color: '#fff' } },
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', left: 'left', textStyle: { color: '#fff' } },
+    series: [{
+        name: '情绪分布',
+        type: 'pie',
+        roseType: 'radius',
+        radius: ['20%', '75%'],
+        center: ['50%', '55%'],
+        label: { color: '#fff' },
+        data: [
+            // 这里填入你的七情数据
+            // { value: 100, name: '乐' }, ...
+        ]
+    }]
+});
+
+// 3. 词语共现图
+var cooc = echarts.init(document.getElementById('cooc'));
+fetch('word_cooccurrence.json')
+    .then(res => res.json())
+    .then(graph => {
+        cooc.setOption({
+            title: { text: '微博高频词共现图', left: 'center', textStyle: { color: '#fff' } },
+            tooltip: {},
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                data: graph.nodes,
+                links: graph.links,
+                roam: true,
+                label: { show: true, color: '#fff' },
+                force: { repulsion: 4000, edgeLength: 200 },
+                lineStyle: { color: 'source', curveness: 0.3 }
+            }]
+        });
+    });
+
+// 4. 主题聚类图（如有）
+var topicGraph = echarts.init(document.getElementById('topicGraph'));
+fetch('topic_graph.json') // 你可以用类似格式导出主题聚类图数据
+    .then(res => res.json())
+    .then(graph => {
+        topicGraph.setOption({
+            title: { text: '微博高频词主题聚类共现图', left: 'center', textStyle: { color: '#fff' } },
+            tooltip: {},
+            legend: { orient: 'vertical', left: 'left', textStyle: { color: '#fff' } },
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                data: graph.nodes,
+                links: graph.links,
+                categories: graph.categories,
+                roam: true,
+                label: { show: true, color: '#fff' },
+                force: { repulsion: 4000, edgeLength: 200 },
+                lineStyle: { color: 'source', curveness: 0.3 }
+            }]
+        });
+    });
+</script>
+</body>
+</html>
