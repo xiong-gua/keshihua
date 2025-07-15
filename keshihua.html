@@ -108,7 +108,7 @@
         </div>
         
         <div class="container mx-auto px-4 z-10 text-center">
-            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-serif font-bold text-white mb-6 text-shadow leading-tight">
+            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-serif font-bold text-white mb-6 text-shadow leading-tight whitespace-nowrap">
                 微博婚姻观点图谱
             </h1>
             
@@ -128,7 +128,7 @@
                 </div>
             </div>
             
-            <p id="disappointed-link" class="text-[clamp(1.2rem,4vw,2rem)] font-serif text-white cursor-pointer hover:text-pink-200 transition-colors duration-300 text-shadow">
+            <p id="disappointed-link" class="text-[clamp(1.2rem,4vw,2rem)] font-serif text-white cursor-pointer hover:text-pink-200 transition-colors duration-300 text-shadow whitespace-nowrap">
                 你是否对婚姻失望 <i class="fa fa-arrow-down ml-2 animate-bounce"></i>
             </p>
         </div>
@@ -181,11 +181,14 @@
                     </div>
                     
                     <div class="w-full lg:w-1/2 fade-in">
-                        <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <canvas id="emotionChart" width="400" height="400"></canvas>
-                        </div>
-                        <div class="mt-6">
-                            <img src="插画2没钱.png" alt="情绪相关插画" class="w-full h-auto rounded-lg shadow-md">
+                        <div class="bg-white p-4 rounded-xl shadow-lg h-full flex flex-col justify-center">
+                            <!-- 扩大玫瑰图尺寸并消除留白 -->
+                            <div class="aspect-square w-full">
+                                <canvas id="emotionChart" width="600" height="600"></canvas>
+                            </div>
+                            <div class="mt-6">
+                                <img src="插画2没钱.png" alt="情绪相关插画" class="w-full h-auto rounded-lg shadow-md">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -290,7 +293,8 @@
                     
                     <div class="w-full lg:w-1/2 fade-in">
                         <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <canvas id="cooccurrenceChart" width="400" height="400"></canvas>
+                            <!-- 添加微博高频词共现图 -->
+                            <img src="微博高频词共现图.html" alt="微博高频词共现图" class="w-full h-auto rounded-lg">
                         </div>
                         <div class="mt-6">
                             <img src="插画2没钱.png" alt="词频相关插画" class="w-full h-auto rounded-lg shadow-md">
@@ -403,7 +407,7 @@
         
         // 初始化所有图表
         function initCharts() {
-            // 情绪分析玫瑰图
+            // 情绪分析玫瑰图（扩大尺寸解决留白问题）
             const emotionCtx = document.getElementById('emotionChart').getContext('2d');
             new Chart(emotionCtx, {
                 type: 'radar',
@@ -427,6 +431,13 @@
                             max: 40,
                             ticks: {
                                 display: false
+                            },
+                            // 调整网格线和角度线减少留白
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
                             }
                         }
                     },
@@ -437,7 +448,14 @@
                             font: {
                                 size: 16
                             }
+                        },
+                        legend: {
+                            position: 'bottom'
                         }
+                    },
+                    // 增加图表内边距减少外部留白
+                    layout: {
+                        padding: 20
                     }
                 }
             });
@@ -537,117 +555,6 @@
                         }
                     }
                 }
-            });
-            
-            // 词频共现图（网络关系图）
-            // Chart.js不直接支持网络关系图，这里用气泡图模拟
-            const cooccurrenceCtx = document.getElementById('cooccurrenceChart').getContext('2d');
-            
-            // 定义词汇及其关系数据
-            const words = [
-                { word: "结婚", x: 50, y: 50, size: 25 },
-                { word: "年轻人", x: 30, y: 40, size: 20 },
-                { word: "生育率", x: 70, y: 40, size: 22 },
-                { word: "经济", x: 30, y: 60, size: 18 },
-                { word: "压力", x: 20, y: 70, size: 15 },
-                { word: "女性", x: 80, y: 60, size: 16 },
-                { word: "家庭", x: 60, y: 70, size: 14 },
-                { word: "政策", x: 80, y: 30, size: 12 },
-                { word: "单身", x: 40, y: 20, size: 17 },
-                { word: "社会", x: 60, y: 20, size: 13 },
-                { word: "上海", x: 10, y: 30, size: 10 },
-                { word: "日本", x: 90, y: 20, size: 9 },
-                { word: "韩国", x: 90, y: 80, size: 9 },
-                { word: "工作", x: 20, y: 50, size: 12 },
-                { word: "自由", x: 70, y: 80, size: 11 }
-            ];
-            
-            // 转换为Chart.js数据格式
-            const chartData = {
-                datasets: [{
-                    label: '词汇',
-                    data: words.map(word => ({
-                        x: word.x,
-                        y: word.y,
-                        r: word.size
-                    })),
-                    backgroundColor: words.map((word, i) => 
-                        `rgba(${150 + i * 5}, ${50 + i * 3}, ${200 - i * 10}, 0.7)`
-                    ),
-                    borderColor: 'white',
-                    borderWidth: 2
-                }]
-            };
-            
-            new Chart(cooccurrenceCtx, {
-                type: 'bubble',
-                data: chartData,
-                options: {
-                    scales: {
-                        x: {
-                            min: 0,
-                            max: 100,
-                            display: false
-                        },
-                        y: {
-                            min: 0,
-                            max: 100,
-                            display: false
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const index = context.dataIndex;
-                                    return words[index].word;
-                                }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: '微博高频词共现网络',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // 在气泡上绘制文字
-            cooccurrenceCtx.canvas.addEventListener('mousemove', function() {
-                drawWordLabels(cooccurrenceCtx, words, cooccurrenceCtx.canvas);
-            });
-            
-            // 初始绘制文字标签
-            setTimeout(() => {
-                drawWordLabels(cooccurrenceCtx, words, cooccurrenceCtx.canvas);
-            }, 100);
-        }
-        
-        // 在气泡上绘制文字标签
-        function drawWordLabels(ctx, words, canvas) {
-            // 清除之前的文字
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 重新绘制图表（保持气泡显示）
-            const chart = Chart.getChart(canvas.id);
-            chart.draw();
-            
-            // 绘制文字
-            words.forEach(word => {
-                const { width, height } = canvas.getBoundingClientRect();
-                const scaleX = width / 100;
-                const scaleY = height / 100;
-                
-                ctx.save();
-                ctx.font = '12px Roboto, sans-serif';
-                ctx.fillStyle = '#333';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(word.word, word.x * scaleX, word.y * scaleY);
-                ctx.restore();
             });
         }
         
