@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     
-    <!-- 主题色配置（基于封面温馨感） -->
     <script>
         tailwind.config = {
             theme: {
@@ -63,24 +62,20 @@
     </style>
 </head>
 <body class="bg-cream text-dark overflow-x-hidden">
-    <!-- 花瓣飘落容器 -->
     <div id="petalContainer"></div>
 
     <!-- 封面页 -->
     <div id="cover" class="relative h-screen flex flex-col items-center justify-center overflow-hidden">
-        <!-- 封面背景图 -->
         <div class="absolute inset-0 z-0">
             <img src="背景图.png" alt="婚姻主题封面" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-dark/40"></div>
         </div>
         
-        <!-- 封面内容 -->
         <div class="relative z-10 text-center px-4 max-w-4xl">
             <h1 id="coverTitle" class="text-[clamp(2.5rem,8vw,5rem)] font-bold text-white mb-10 cursor-pointer">
                 你是否<br>对婚姻失望？
             </h1>
             
-            <!-- 最新婚育数据 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                 <div class="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
                     <p class="text-white/90 mb-2">2024年结婚登记数</p>
@@ -101,9 +96,8 @@
         </div>
     </div>
 
-    <!-- 主内容区（初始隐藏） -->
+    <!-- 主内容区 -->
     <div id="mainContent" class="min-h-screen hidden">
-        <!-- 导航栏 -->
         <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm py-4">
             <div class="container mx-auto px-4 flex justify-center gap-4 flex-wrap">
                 <button class="nav-btn active px-5 py-2 rounded-full bg-rose text-white" data-target="roseChart">
@@ -121,9 +115,8 @@
             </div>
         </nav>
 
-        <!-- 内容区域 -->
         <div class="container mx-auto px-4 py-12">
-            <!-- 1. 情绪玫瑰图板块 -->
+            <!-- 1. 情绪玫瑰图板块（增大图表尺寸） -->
             <section id="roseChart" class="mb-20 section-content">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                     <div>
@@ -138,18 +131,20 @@
                         <img src="插画2没钱.png" alt="经济压力相关场景" class="w-full h-auto rounded-xl shadow-md">
                     </div>
                     <div>
-                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[500px]">
+                        <!-- 图表高度从500px增至600px -->
+                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[600px]">
                             <div id="emotionChart" class="w-full h-full"></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 2. LDA主题分布板块 -->
+            <!-- 2. LDA主题分布板块（增大图表尺寸） -->
             <section id="topicChart" class="mb-20 section-content hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                     <div>
-                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[500px]">
+                        <!-- 图表高度从500px增至600px -->
+                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[600px]">
                             <div id="ldaChart" class="w-full h-full"></div>
                         </div>
                     </div>
@@ -167,7 +162,7 @@
                 </div>
             </section>
 
-            <!-- 3. 词云图板块 -->
+            <!-- 3. 词云图板块（增大显示尺寸） -->
             <section id="wordcloud" class="mb-20 section-content hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                     <div>
@@ -182,18 +177,20 @@
                         <img src="卧室插画1.png" alt="婚恋家庭相关场景" class="w-full h-auto rounded-xl shadow-md">
                     </div>
                     <div>
-                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[500px] flex items-center justify-center">
-                            <img src="年轻人结婚_词云图.png" alt="婚姻话题词云" class="max-w-full max-h-full object-contain">
+                        <!-- 词云容器高度从500px增至600px，放大显示比例 -->
+                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[600px] flex items-center justify-center">
+                            <img src="年轻人结婚_词云图.png" alt="婚姻话题词云" class="max-w-[90%] max-h-[90%] object-contain">
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 4. 趋势分析板块 -->
+            <!-- 4. 趋势分析板块（增大图表尺寸） -->
             <section id="trendChart" class="mb-20 section-content hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                     <div>
-                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[500px]">
+                        <!-- 图表高度从500px增至600px -->
+                        <div class="bg-white p-4 rounded-2xl shadow-lg h-[600px]">
                             <div id="marriageTrendChart" class="w-full h-full"></div>
                         </div>
                     </div>
@@ -273,7 +270,6 @@
         // 导航切换功能
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                // 更新按钮样式
                 document.querySelectorAll('.nav-btn').forEach(b => {
                     b.classList.remove('active', 'bg-rose', 'text-white');
                     b.classList.add('bg-rose/30', 'text-dark');
@@ -281,7 +277,6 @@
                 btn.classList.add('active', 'bg-rose', 'text-white');
                 btn.classList.remove('bg-rose/30', 'text-dark');
                 
-                // 显示对应内容
                 const target = btn.getAttribute('data-target');
                 document.querySelectorAll('.section-content').forEach(section => {
                     section.classList.add('hidden');
@@ -291,18 +286,19 @@
             });
         });
 
-        // 初始化图表（基于文档数据）
+        // 初始化图表（基于《图文说明.docx》数据，增大图表尺寸）
         window.addEventListener('load', () => {
             // 1. 情绪玫瑰图
             const emotionChart = echarts.init(document.getElementById('emotionChart'));
             emotionChart.setOption({
-                title: { text: '微博七大情绪玫瑰图', left: 'center' },
+                title: { text: '微博七大情绪玫瑰图', left: 'center', textStyle: { fontSize: 16 } },
                 tooltip: { trigger: 'item' },
-                legend: { orient: 'horizontal', bottom: 10, data: ['乐', '好', '怒', '哀', '惧', '恶', '惊'] },
+                legend: { orient: 'horizontal', bottom: 10, data: ['乐', '好', '怒', '哀', '惧', '恶', '惊'], textStyle: { fontSize: 14 } },
                 series: [{
                     name: '情绪分布',
                     type: 'pie',
                     roseType: 'radius',
+                    radius: ['20%', '80%'], // 扩大图表半径比例
                     data: [
                         { value: 3092, name: '乐', itemStyle: { color: '#C8E6C9' } },
                         { value: 3733, name: '好', itemStyle: { color: '#A5D6A7' } },
@@ -312,45 +308,63 @@
                         { value: 6105, name: '恶', itemStyle: { color: '#CE93D8' } },
                         { value: 156, name: '惊', itemStyle: { color: '#FFCCBC' } }
                     ],
-                    label: { formatter: '{b}: {d}%' }
+                    label: { formatter: '{b}: {d}%', fontSize: 14 }
                 }]
             });
 
             // 2. LDA主题饼图
             const ldaChart = echarts.init(document.getElementById('ldaChart'));
             ldaChart.setOption({
-                title: { text: '微博LDA主题分布饼图', left: 'center' },
+                title: { text: '微博LDA主题分布饼图', left: 'center', textStyle: { fontSize: 16 } },
                 tooltip: { trigger: 'item' },
-                legend: { orient: 'vertical', left: 10, top: 'center', data: ['社会观念与舆论压力', '经济压力与生活', '婚恋与家庭', '政策与生育措施', '自由与个人追求'] },
+                legend: { orient: 'vertical', left: 10, top: 'center', data: ['社会观念与舆论压力', '经济压力与生活', '婚恋与家庭', '政策与生育措施', '自由与个人追求'], textStyle: { fontSize: 14 } },
                 series: [{
                     name: '主题分布',
                     type: 'pie',
-                    radius: ['30%', '70%'],
+                    radius: ['30%', '80%'], // 扩大图表半径比例
                     data: [
                         { value: 890, name: '社会观念与舆论压力', itemStyle: { color: '#FFE0B2' } },
                         { value: 470, name: '经济压力与生活', itemStyle: { color: '#BBDEFB' } },
                         { value: 490, name: '婚恋与家庭', itemStyle: { color: '#F8BBD0' } },
                         { value: 243, name: '政策与生育措施', itemStyle: { color: '#CE93D8' } },
                         { value: 114, name: '自由与个人追求', itemStyle: { color: '#C8E6C9' } }
-                    ]
+                    ],
+                    label: { formatter: '{b}: {d}%', fontSize: 14 }
                 }]
             });
 
             // 3. 趋势图
             const trendChart = echarts.init(document.getElementById('marriageTrendChart'));
             trendChart.setOption({
-                title: { text: '2014-2024年结婚率与生育率趋势', left: 'center' },
+                title: { text: '2014-2024年结婚率与生育率趋势', left: 'center', textStyle: { fontSize: 16 } },
                 tooltip: { trigger: 'axis' },
-                legend: { data: ['结婚率（万对）', '生育率（‰）'], top: 30 },
-                grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-                xAxis: { type: 'category', data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'] },
+                legend: { data: ['结婚率（万对）', '生育率（‰）'], top: 30, textStyle: { fontSize: 14 } },
+                grid: { left: '5%', right: '5%', bottom: '8%', containLabel: true }, // 扩大网格区域
+                xAxis: { 
+                    type: 'category', 
+                    data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                    axisLabel: { fontSize: 12, rotate: 45 }
+                },
                 yAxis: [
-                    { type: 'value', name: '结婚率（万对）', position: 'left' },
-                    { type: 'value', name: '生育率（‰）', position: 'right' }
+                    { type: 'value', name: '结婚率（万对）', position: 'left', nameTextStyle: { fontSize: 14 } },
+                    { type: 'value', name: '生育率（‰）', position: 'right', nameTextStyle: { fontSize: 14 } }
                 ],
                 series: [
-                    { name: '结婚率（万对）', type: 'line', data: [1306.7, 1224.7, 1142.8, 1063.1, 1013.9, 927.3, 814.3, 763.6, 683.5, 768, 610.6], lineStyle: { color: '#F8BBD0' } },
-                    { name: '生育率（‰）', type: 'line', data: [12.37, 12.07, 12.95, 12.43, 10.94, 10.48, 8.52, 7.52, 6.77, 6.39, 6.0], lineStyle: { color: '#BBDEFB' }, yAxisIndex: 1 }
+                    { 
+                        name: '结婚率（万对）', 
+                        type: 'line', 
+                        data: [1306.7, 1224.7, 1142.8, 1063.1, 1013.9, 927.3, 814.3, 763.6, 683.5, 768, 610.6], 
+                        lineStyle: { color: '#F8BBD0', width: 3 },
+                        symbolSize: 10 // 增大数据点
+                    },
+                    { 
+                        name: '生育率（‰）', 
+                        type: 'line', 
+                        data: [12.37, 12.07, 12.95, 12.43, 10.94, 10.48, 8.52, 7.52, 6.77, 6.39, 6.0], 
+                        lineStyle: { color: '#BBDEFB', width: 3 },
+                        symbolSize: 10, // 增大数据点
+                        yAxisIndex: 1 
+                    }
                 ]
             });
 
@@ -380,15 +394,11 @@
                 const inspireText = document.getElementById('inspireText');
                 const emojiArea = document.getElementById('emojiArea');
                 
-                // 随机生成句子和表情
                 inspireText.textContent = inspireTexts[Math.floor(Math.random() * inspireTexts.length)];
                 emojiArea.textContent = emojis[Math.floor(Math.random() * emojis.length)];
                 
-                // 显示结果区域
                 resultArea.classList.remove('hidden');
                 resultArea.scrollIntoView({ behavior: 'smooth' });
-                
-                // 清空输入
                 document.getElementById('marriageInput').value = '';
             }
         });
