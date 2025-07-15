@@ -6,24 +6,17 @@
     <title>微博婚姻观点可视化</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#e9446a',
-                        secondary: '#9370db',
-                        neutral: '#f8f4f9',
-                        dark: '#2d2a32',
-                        light: '#fffaf0'
-                    },
-                    fontFamily: {
-                        serif: ['Noto Serif SC', 'serif'],
-                        sans: ['Roboto', 'sans-serif']
+                        rose: '#F8D7DA',
+                        cream: '#FFF5F5',
+                        dark: '#5A4B40',
+                        accent: '#E74C3C'
                     }
                 }
             }
@@ -32,424 +25,329 @@
     
     <style type="text/tailwindcss">
         @layer utilities {
-            .text-shadow {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            }
-            .rotate-in {
-                animation: rotateIn 0.8s ease forwards;
-            }
-            .scale-on-hover {
+            .text-grow {
                 transition: transform 0.3s ease;
             }
-            .scale-on-hover:hover {
+            .text-grow:hover {
                 transform: scale(1.05);
+                color: #E74C3C;
             }
             .petal {
-                position: absolute;
-                background-color: #ffccd5;
-                border-radius: 50% 50% 50% 0;
-                animation: fall linear infinite;
+                position: fixed;
+                background-size: contain;
+                background-repeat: no-repeat;
+                pointer-events: none;
+                z-index: 10;
+                opacity: 0.7;
             }
-        }
-        
-        @keyframes rotateIn {
-            from {
-                transform: rotate(0deg) scale(0);
-                opacity: 0;
+            .rotate-enter {
+                animation: rotateIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             }
-            to {
-                transform: rotate(360deg) scale(1);
-                opacity: 1;
+            @keyframes rotateIn {
+                from { transform: rotateY(180deg) scale(0.8); opacity: 0; }
+                to { transform: rotateY(0) scale(1); opacity: 1; }
             }
-        }
-        
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
+            @keyframes petalFall {
+                0% { transform: translateY(-20px) rotate(0deg); opacity: 0.7; }
+                100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
             }
-        }
-        
-        .section-card {
-            transition: all 0.5s ease;
-        }
-        
-        .section-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .fade-in {
-            animation: fadeIn 1s ease forwards;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+            /* 图表容器紧凑化 */
+            .chart-wrapper {
+                width: 100%;
+                height: 500px; /* 核心调整：压缩高度消除留白 */
+                overflow: hidden;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .chart-container {
-            width: 100%;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        iframe {
-            border: none;
-            width: 100%;
         }
     </style>
 </head>
-<body class="bg-light font-sans text-dark overflow-x-hidden">
-    <!-- 花瓣飘落效果容器 -->
-    <div id="petals-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></div>
+<body class="bg-cream text-dark overflow-x-hidden">
+    <div id="petalContainer"></div>
 
-    <!-- 封面页（已恢复） -->
-    <header id="cover-page" class="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <!-- 封面页 -->
+    <div id="cover" class="relative h-screen flex flex-col items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="背景图.png" alt="封面背景" class="w-full h-full object-cover opacity-70">
-            <div class="absolute inset-0 bg-gradient-to-b from-pink-900/30 to-purple-900/30"></div>
+            <img src="背景图.png" alt="婚姻主题封面" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-dark/40"></div>
         </div>
         
-        <div class="container mx-auto px-4 z-10 text-center">
-            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-serif font-bold text-white mb-6 text-shadow leading-tight whitespace-nowrap">
-                微博婚姻观点图谱
+        <div class="relative z-10 text-center px-4 max-w-4xl">
+            <h1 id="coverTitle" class="text-[clamp(2.5rem,8vw,5rem)] font-bold text-white mb-10 cursor-pointer">
+                你是否<br>对婚姻失望？
             </h1>
             
-            <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-2xl mb-10 inline-block">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div>
-                        <p class="text-lg text-gray-700 mb-2">2024年结婚率</p>
-                        <p class="text-4xl font-bold text-primary">610.6 万对</p>
-                        <p class="text-sm text-gray-500">较2013年峰值近乎腰斩</p>
-                    </div>
-                    <div class="h-12 w-px bg-gray-300 hidden md:block"></div>
-                    <div>
-                        <p class="text-lg text-gray-700 mb-2">2024年生育率</p>
-                        <p class="text-4xl font-bold text-secondary">6.77‰</p>
-                        <p class="text-sm text-gray-500">较2023年增加52万人，但形势仍严峻</p>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div class="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
+                    <p class="text-white/90 mb-2">2024年结婚登记数</p>
+                    <p class="text-white text-4xl font-bold">610.6 万对</p>
+                    <p class="text-white/80 text-sm">结婚率约 4.3‰（1980年以来最低）</p>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
+                    <p class="text-white/90 mb-2">2024年人口出生率</p>
+                    <p class="text-white text-4xl font-bold">6.77‰</p>
+                    <p class="text-white/80 text-sm">全年出生 954 万人</p>
                 </div>
             </div>
-            
-            <p id="disappointed-link" class="text-[clamp(1.2rem,4vw,2rem)] font-serif text-white cursor-pointer hover:text-pink-200 transition-colors duration-300 text-shadow whitespace-nowrap">
-                你是否对婚姻失望 <i class="fa fa-arrow-down ml-2 animate-bounce"></i>
-            </p>
         </div>
-    </header>
+    </div>
 
-    <!-- 主内容区 -->
-    <main id="main-content" class="hidden">
-        <!-- 导航区 -->
-        <nav class="py-8 bg-gradient-to-r from-pink-100 to-purple-100">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-serif text-center mb-8">探索婚姻观点的多元维度</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <button class="section-btn section-card bg-white rounded-lg p-4 text-center shadow-md" data-target="emotion">
-                        <i class="fa fa-heart text-primary text-2xl mb-2"></i>
-                        <p>情绪分析</p>
-                    </button>
-                    <button class="section-btn section-card bg-white rounded-lg p-4 text-center shadow-md" data-target="topics">
-                        <i class="fa fa-comments text-primary text-2xl mb-2"></i>
-                        <p>话题分布</p>
-                    </button>
-                    <button class="section-btn section-card bg-white rounded-lg p-4 text-center shadow-md" data-target="rates">
-                        <i class="fa fa-line-chart text-primary text-2xl mb-2"></i>
-                        <p>婚育趋势</p>
-                    </button>
-                    <button class="section-btn section-card bg-white rounded-lg p-4 text-center shadow-md" data-target="wordcloud">
-                        <i class="fa fa-cloud text-primary text-2xl mb-2"></i>
-                        <p>热门词汇</p>
-                    </button>
-                    <button class="section-btn section-card bg-white rounded-lg p-4 text-center shadow-md" data-target="cooccurrence">
-                        <i class="fa fa-share-alt text-primary text-2xl mb-2"></i>
-                        <p>词频关联</p>
-                    </button>
-                </div>
+    <!-- 主内容区（保留所有元素，仅优化图表区域） -->
+    <div id="mainContent" class="min-h-screen hidden">
+        <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm py-4">
+            <div class="container mx-auto px-4 flex justify-center gap-4 flex-wrap">
+                <button class="nav-btn active px-5 py-2 rounded-full bg-rose text-white" data-target="roseChart">
+                    情绪玫瑰图
+                </button>
+                <button class="nav-btn px-5 py-2 rounded-full bg-rose/30 text-dark hover:bg-rose hover:text-white transition-colors" data-target="topicChart">
+                    主题分布
+                </button>
+                <button class="nav-btn px-5 py-2 rounded-full bg-rose/30 text-dark hover:bg-rose hover:text-white transition-colors" data-target="wordcloud">
+                    热门词云
+                </button>
+                <button class="nav-btn px-5 py-2 rounded-full bg-rose/30 text-dark hover:bg-rose hover:text-white transition-colors" data-target="trendChart">
+                    趋势分析
+                </button>
             </div>
         </nav>
 
-        <!-- 情绪分析玫瑰图（使用pyecharts生成的HTML） -->
-        <section id="emotion" class="py-16 bg-white">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row items-center gap-10">
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <h2 class="text-3xl font-serif mb-6 text-primary">公众情绪图谱</h2>
-                        <p class="mb-4 scale-on-hover">微博讨论中，负面情绪占据主导，"怒"(32.08%)和"恶"(26.83%)成为最突出的情绪，反映出社会对年轻人婚育难题的深刻焦虑与不满。</p>
-                        <p class="mb-4 scale-on-hover">积极情绪仅占不到三成，"好"(16.4%)和"乐"(13.59%)的比例相对较低，显示出积极情绪难以对冲负面情绪的现状。</p>
-                        
-                        <div class="mt-8 p-4 bg-pink-50 rounded-lg border-l-4 border-primary">
-                            <p class="italic">"但凡多给母亲和宝宝多一些尊重与理解，也不至于生育率越来越低了"</p>
-                        </div>
+        <div class="container mx-auto px-4 py-8">
+            <!-- 1. 情绪玫瑰图板块（图表紧凑化） -->
+            <section id="roseChart" class="mb-16 section-content">
+                <h2 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold mb-6 text-center">
+                    <span class="text-accent">情绪分布</span>：微博讨论的情感底色
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-wrapper">
+                        <div id="emotionChart" class="w-full h-full"></div>
                     </div>
-                    
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <!-- 嵌入pyecharts生成的玫瑰图HTML -->
-                            <div class="chart-container" style="height: 500px;">
-                                <iframe src="微博七大情绪玫瑰图.html" height="500"></iframe>
-                            </div>
-                            <div class="mt-6">
-                                <img src="插画2没钱.png" alt="情绪相关插画" class="w-full h-auto rounded-lg shadow-md">
-                            </div>
+                    <div>
+                        <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                            <p class="mb-4"><span class="text-grow font-medium">基于《图文说明.docx》分析，微博2260条讨论中负面情绪占比58.91%，"怒"（32.08%）与"恶"（26.83%）为主。</span></p>
+                            <p><span class="text-grow">"怒"源于婚育成本过高，"恶"指向婚恋乱象，积极情绪不足30%。</span></p>
                         </div>
+                        <img src="插画2没钱.png" alt="经济压力场景" class="w-full h-auto rounded-xl shadow-md">
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- LDA主题分布（使用pyecharts生成的HTML） -->
-        <section id="topics" class="py-16 bg-purple-50">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row-reverse items-center gap-10">
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <h2 class="text-3xl font-serif mb-6 text-primary">讨论主题分布</h2>
-                        <p class="mb-4 scale-on-hover">社会观念与舆论压力(40.33%)成为讨论最多的主题，反映出传统观念与现代生活方式的冲突。</p>
-                        <p class="mb-4 scale-on-hover">婚恋与家庭(22.2%)和经济压力与生活(21.3%)紧随其后，显示年轻人在婚姻决策中面临的现实考量。</p>
-                        
-                        <div class="mt-8 p-4 bg-purple-50 rounded-lg border-l-4 border-secondary">
-                            <p class="italic">"随着生育率和婚恋率的降低，以后也许更低，或者干脆就无这个职业了。也就往后十年的事"</p>
+            <!-- 2. LDA主题分布板块（图表紧凑化） -->
+            <section id="topicChart" class="mb-16 section-content hidden">
+                <h2 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold mb-6 text-center">
+                    <span class="text-accent">主题聚焦</span>：讨论的核心维度
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                            <p class="mb-4"><span class="text-grow font-medium">《图文说明.docx》显示，"社会观念与舆论压力"占40.33%，是核心话题。</span></p>
+                            <p><span class="text-grow">经济压力（21.3%）、婚恋家庭（22.2%）紧随，政策期待占11.01%。</span></p>
                         </div>
+                        <img src="插画4办公.png" alt="社会观念场景" class="w-full h-auto rounded-xl shadow-md">
                     </div>
-                    
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <!-- 嵌入pyecharts生成的主题聚类饼图HTML -->
-                            <div class="chart-container" style="height: 400px;">
-                                <iframe src="微博LDA主题分布饼图.html" height="400"></iframe>
-                            </div>
-                            <div class="mt-6">
-                                <img src="插画3想象.png" alt="主题相关插画" class="w-full h-auto rounded-lg shadow-md">
-                            </div>
-                        </div>
+                    <div class="chart-wrapper">
+                        <div id="ldaChart" class="w-full h-full"></div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 结婚率与生育率趋势（使用pyecharts生成的HTML） -->
-        <section id="rates" class="py-16 bg-white">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row items-center gap-10">
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <h2 class="text-3xl font-serif mb-6 text-primary">婚育率变化趋势</h2>
-                        <p class="mb-4 scale-on-hover">从2014到2024年，结婚率从1306.7万对持续下降至610.6万对，期间仅在2023年因疫情后的补偿性需求及"双春年"民俗影响有所回升。</p>
-                        <p class="mb-4 scale-on-hover">2024年结婚登记数刷新了自1980年以来的最低纪录，相较2013年的峰值近乎腰斩。</p>
-                        
-                        <div class="mt-8 p-4 bg-pink-50 rounded-lg border-l-4 border-primary">
-                            <p class="italic">"上海人是无所谓上海生育率有多低、对生有有多不友好的。因为上海是可以从全国吸收年轻人去打工交社保..."</p>
-                        </div>
+            <!-- 3. 词云图板块（图表紧凑化） -->
+            <section id="wordcloud" class="mb-16 section-content hidden">
+                <h2 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold mb-6 text-center">
+                    <span class="text-accent">热门词云</span>：舆论焦点的直观呈现
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-wrapper flex items-center justify-center bg-white p-4 rounded-xl shadow-lg">
+                        <img src="年轻人结婚_词云图.png" alt="婚育词云" class="max-w-full max-h-full object-contain">
                     </div>
-                    
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <!-- 嵌入pyecharts生成的折线图HTML -->
-                            <div class="chart-container" style="height: 400px;">
-                                <iframe src="2014-2024生育率与结婚率折线图.html" height="400"></iframe>
-                            </div>
-                            <div class="mt-6">
-                                <img src="插画4办公.png" alt="婚育率相关插画" class="w-full h-auto rounded-lg shadow-md">
-                            </div>
+                    <div>
+                        <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                            <p class="mb-4"><span class="text-grow font-medium">词云凸显"不""单身""生育率低"等词，反映年轻人拒婚倾向（《图文说明.docx》）。</span></p>
+                            <p><span class="text-grow">"经济""压力"揭示现实负担，"女性""政策"体现性别与制度视角。</span></p>
                         </div>
+                        <img src="卧室插画1.png" alt="婚恋家庭场景" class="w-full h-auto rounded-xl shadow-md">
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 词云图（使用生成的图片） -->
-        <section id="wordcloud" class="py-16 bg-pink-50">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row-reverse items-center gap-10">
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <h2 class="text-3xl font-serif mb-6 text-primary">热门词汇分析</h2>
-                        <p class="mb-4 scale-on-hover">词云图中，"不"、"单身"、"生育率低"等核心词汇，锚定了年轻人"拒婚拒育"行为倾向这一显性讨论焦点。</p>
-                        <p class="mb-4 scale-on-hover">"经济"、"工作"、"压力"等词揭示了现实负担对婚育意愿的抑制，高成本与职场竞争让婚育成为"不可承受之重"。</p>
-                        
-                        <div class="mt-8 p-4 bg-pink-50 rounded-lg border-l-4 border-primary">
-                            <p class="italic">"生育率低是你禁养犬就能解决的吗"</p>
-                        </div>
+            <!-- 4. 趋势分析板块（图表紧凑化） -->
+            <section id="trendChart" class="mb-16 section-content hidden">
+                <h2 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold mb-6 text-center">
+                    <span class="text-accent">趋势变化</span>：数据背后的社会变迁
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-wrapper">
+                        <div id="marriageTrendChart" class="w-full h-full"></div>
                     </div>
-                    
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <!-- 词云图使用生成的PNG图片 -->
-                            <div class="chart-container">
-                                <img src="年轻人结婚_词云图.png" alt="微博婚姻话题词云图" class="w-full h-auto rounded-lg">
-                            </div>
-                            <div class="mt-6">
-                                <img src="卧室插画1.png" alt="词云相关插画" class="w-full h-auto rounded-lg shadow-md">
-                            </div>
+                    <div>
+                        <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                            <p class="mb-4"><span class="text-grow font-medium">2014-2024年结婚率从1306.7万对降至610.6万对，降幅超50%（《图文说明.docx》）。</span></p>
+                            <p><span class="text-grow">生育率从12.37‰降至6.0‰，仅2023年因特殊因素小幅回升。</span></p>
                         </div>
+                        <img src="插画3想象.png" alt="个人追求场景" class="w-full h-auto rounded-xl shadow-md">
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 词频共现图（使用pyecharts生成的HTML） -->
-        <section id="cooccurrence" class="py-16 bg-white">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row items-center gap-10">
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <h2 class="text-3xl font-serif mb-6 text-primary">词汇关联网络</h2>
-                        <p class="mb-4 scale-on-hover">语词共现图围绕年轻人婚育话题，编织出复杂且多元的讨论网络，"结婚"、"年轻人"、"生育率"等核心词高度聚合。</p>
-                        <p class="mb-4 scale-on-hover">时间与地域相关词汇，如"2023"、"2024"、"中国"、"日本"、"韩国"，暗示讨论包含"代际对比"与"国际参照"双重维度。</p>
-                        
-                        <div class="mt-8 p-4 bg-purple-50 rounded-lg border-l-4 border-secondary">
-                            <p class="italic">"上海生育率低是因为不生育友好而不是因为生育不友好"</p>
-                        </div>
+            <!-- 互动填空题（保留） -->
+            <section class="bg-white p-8 rounded-2xl shadow-xl">
+                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-6 text-center">
+                    你心中的婚姻是______？
+                </h2>
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                        <input type="text" id="marriageInput" placeholder="请输入你的答案..." class="flex-1 px-4 py-3 border border-rose rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                        <button id="submitBtn" class="bg-accent text-white px-6 py-3 rounded-lg hover:bg-accent/90 transition-colors">
+                            提交
+                        </button>
                     </div>
-                    
-                    <div class="w-full lg:w-1/2 fade-in">
-                        <div class="bg-white p-4 rounded-xl shadow-lg">
-                            <!-- 嵌入pyecharts生成的共现图HTML -->
-                            <div class="chart-container" style="height: 500px;">
-                                <iframe src="微博高频词共现图.html" height="500"></iframe>
-                            </div>
-                            <div class="mt-6">
-                                <img src="插画2没钱.png" alt="词频相关插画" class="w-full h-auto rounded-lg shadow-md">
-                            </div>
-                        </div>
+                    <div id="resultArea" class="min-h-[120px] bg-rose/10 p-6 rounded-xl text-center hidden">
+                        <p id="inspireText" class="text-lg mb-4"></p>
+                        <p id="emojiArea" class="text-3xl"></p>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- 互动区域 -->
-        <section class="py-16 bg-gradient-to-r from-pink-100 to-purple-100">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl font-serif mb-8 text-primary">你的婚姻观是什么？</h2>
-                
-                <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
-                    <p class="mb-6">在你心中，婚姻是___________________</p>
-                    
-                    <input type="text" id="marriageInput" placeholder="请填写你对婚姻的看法..." 
-                           class="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-primary">
-                    
-                    <button id="generateBtn" class="bg-primary hover:bg-pink-700 text-white py-3 px-8 rounded-lg transition-colors duration-300">
-                        生成我的爱情句子 <i class="fa fa-heart ml-2"></i>
-                    </button>
-                    
-                    <div id="resultArea" class="mt-8 hidden">
-                        <h3 class="text-xl font-semibold mb-4">给你的小确幸：</h3>
-                        <div id="loveQuotes" class="text-left space-y-2"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-dark text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>数据来源：2024年5月至2025年6月微博讨论数据（共2260条）</p>
-            <p class="mt-2">© 2025 微博婚姻观点可视化 | 用数据解读情感与现实</p>
+            </section>
         </div>
-    </footer>
+    </div>
 
     <script>
-        // 创建花瓣飘落效果
+        // 玫瑰花飘落特效（保留）
         function createPetals() {
-            const container = document.getElementById('petals-container');
-            const count = 30;
-            
-            for (let i = 0; i < count; i++) {
-                const petal = document.createElement('div');
-                petal.classList.add('petal');
-                
-                // 随机大小
-                const size = Math.random() * 15 + 5;
-                petal.style.width = `${size}px`;
-                petal.style.height = `${size}px`;
-                
-                // 随机位置
-                petal.style.left = `${Math.random() * 100}vw`;
-                petal.style.top = `-${size}px`;
-                
-                // 随机颜色
-                const hue = Math.random() * 30 + 330; // 粉色到红色范围
-                petal.style.backgroundColor = `hsl(${hue}, 70%, 80%)`;
-                
-                // 随机旋转
-                petal.style.transform = `rotate(${Math.random() * 360}deg)`;
-                
-                // 随机动画时长
-                const duration = Math.random() * 10 + 10;
-                petal.style.animationDuration = `${duration}s`;
-                
-                // 随机延迟
-                petal.style.animationDelay = `${Math.random() * 10}s`;
-                
-                container.appendChild(petal);
-            }
-        }
-        
-        // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
-            // 创建花瓣效果
-            createPetals();
-            
-            // 封面页跳转
-            document.getElementById('disappointed-link').addEventListener('click', function() {
-                document.getElementById('cover-page').style.display = 'none';
-                document.getElementById('main-content').classList.remove('hidden');
-                window.scrollTo(0, 0);
-            });
-            
-            // 板块导航
-            const sectionBtns = document.querySelectorAll('.section-btn');
-            sectionBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-target');
-                    const targetElement = document.getElementById(targetId);
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                });
-            });
-            
-            // 生成爱情句子按钮事件
-            document.getElementById('generateBtn').addEventListener('click', generateLoveQuotes);
-        });
-        
-        // 生成爱情句子
-        function generateLoveQuotes() {
-            const input = document.getElementById('marriageInput').value.trim();
-            const resultArea = document.getElementById('resultArea');
-            const quotesContainer = document.getElementById('loveQuotes');
-            
-            resultArea.classList.remove('hidden');
-            quotesContainer.innerHTML = '';
-            
-            // 爱情句子库
-            const loveQuotes = [
-                "即使世界喧嚣，总有人为你静下心来 ❤️",
-                "最好的爱情，是并肩看遍世间风景 🌅",
-                "对的人，会让你觉得等待都是值得的 ⏳",
-                "爱情不是寻找完美的人，而是学会用完美的眼光欣赏不完美的人 ✨",
-                "慢慢来，谁不是摸着石头过河呢？ 💑"
+            const container = document.getElementById('petalContainer');
+            const petals = [
+                'https://cdn-icons-png.flaticon.com/128/821/821907.png',
+                'https://cdn-icons-png.flaticon.com/128/1067/1067969.png',
+                'https://cdn-icons-png.flaticon.com/128/542/542747.png'
             ];
             
-            // 随机选择3句
-            const shuffled = [...loveQuotes].sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, 3);
-            
-            selected.forEach(quote => {
-                const p = document.createElement('p');
-                p.innerHTML = quote;
-                quotesContainer.appendChild(p);
-            });
-            
-            if (input) {
-                const userInputP = document.createElement('p');
-                userInputP.classList.add('mt-4', 'pt-4', 'border-t', 'border-gray-200');
-                userInputP.innerHTML = `你说："婚姻是${input}" 🌟`;
-                quotesContainer.appendChild(userInputP);
-            }
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                const size = Math.random() * 20 + 15;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}%`;
+                petal.style.top = '-5%';
+                petal.style.backgroundImage = `url(${petals[Math.floor(Math.random() * petals.length)]})`;
+                petal.style.animation = `petalFall ${Math.random() * 10 + 8}s linear`;
+                container.appendChild(petal);
+                
+                setTimeout(() => petal.remove(), 18000);
+            }, 800);
         }
+        createPetals();
+
+        // 封面旋转跳转（保留）
+        document.getElementById('coverTitle').addEventListener('click', () => {
+            document.getElementById('cover').style.display = 'none';
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.remove('hidden');
+            mainContent.classList.add('rotate-enter');
+        });
+
+        // 导航切换（保留）
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-rose', 'text-white');
+                    b.classList.add('bg-rose/30', 'text-dark');
+                });
+                btn.classList.add('active', 'bg-rose', 'text-white');
+                btn.classList.remove('bg-rose/30', 'text-dark');
+                
+                const target = btn.getAttribute('data-target');
+                document.querySelectorAll('.section-content').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById(target).classList.remove('hidden');
+                document.getElementById(target).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // 图表初始化（基于《图文说明.docx》数据，紧凑化配置）
+        window.addEventListener('load', () => {
+            // 1. 情绪玫瑰图
+            const emotionChart = echarts.init(document.getElementById('emotionChart'));
+            emotionChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { orient: 'horizontal', bottom: 0, data: ['乐', '好', '怒', '哀', '惧', '恶', '惊'] },
+                series: [{
+                    type: 'pie',
+                    roseType: 'radius',
+                    radius: ['20%', '90%'], // 图表占满容器
+                    data: [
+                        { value: 3092, name: '乐' },
+                        { value: 3733, name: '好' },
+                        { value: 7300, name: '怒' },
+                        { value: 1748, name: '哀' },
+                        { value: 623, name: '惧' },
+                        { value: 6105, name: '恶' },
+                        { value: 156, name: '惊' }
+                    ]
+                }]
+            });
+
+            // 2. LDA主题图
+            const ldaChart = echarts.init(document.getElementById('ldaChart'));
+            ldaChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { orient: 'vertical', left: 10, top: 'center', data: ['社会观念与舆论压力', '经济压力与生活', '婚恋与家庭', '政策与生育措施', '自由与个人追求'] },
+                series: [{
+                    type: 'pie',
+                    radius: ['30%', '90%'], // 图表占满容器
+                    data: [
+                        { value: 890, name: '社会观念与舆论压力' },
+                        { value: 470, name: '经济压力与生活' },
+                        { value: 490, name: '婚恋与家庭' },
+                        { value: 243, name: '政策与生育措施' },
+                        { value: 114, name: '自由与个人追求' }
+                    ]
+                }]
+            });
+
+            // 3. 趋势图
+            const trendChart = echarts.init(document.getElementById('marriageTrendChart'));
+            trendChart.setOption({
+                tooltip: { trigger: 'axis' },
+                legend: { data: ['结婚率（万对）', '生育率（‰）'], top: 0 },
+                grid: { left: '5%', right: '5%', bottom: '5%', containLabel: true }, // 消除内边距留白
+                xAxis: { type: 'category', data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'] },
+                yAxis: [
+                    { type: 'value', name: '结婚率（万对）' },
+                    { type: 'value', name: '生育率（‰）', position: 'right' }
+                ],
+                series: [
+                    { name: '结婚率（万对）', type: 'line', data: [1306.7, 1224.7, 1142.8, 1063.1, 1013.9, 927.3, 814.3, 763.6, 683.5, 768, 610.6] },
+                    { name: '生育率（‰）', type: 'line', data: [12.37, 12.07, 12.95, 12.43, 10.94, 10.48, 8.52, 7.52, 6.77, 6.39, 6.0], yAxisIndex: 1 }
+                ]
+            });
+
+            // 响应窗口大小
+            window.addEventListener('resize', () => {
+                emotionChart.resize();
+                ldaChart.resize();
+                trendChart.resize();
+            });
+        });
+
+        // 互动填空题（保留）
+        const inspireTexts = [
+            "婚姻是两个灵魂的并肩前行 🌸",
+            "好的婚姻会让你重新相信爱 💞",
+            "即使现实复杂，总有人与你共赴温柔 🏠"
+        ];
+        const emojis = ['💘', '💝', '💓', '💗', '💖'];
+
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const input = document.getElementById('marriageInput').value.trim();
+            if (input) {
+                const resultArea = document.getElementById('resultArea');
+                const inspireText = document.getElementById('inspireText');
+                const emojiArea = document.getElementById('emojiArea');
+                
+                inspireText.textContent = inspireTexts[Math.floor(Math.random() * inspireTexts.length)];
+                emojiArea.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                resultArea.classList.remove('hidden');
+            }
+        });
     </script>
 </body>
 </html>
